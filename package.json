@@ -1,10 +1,14 @@
 {
   "name": "nis-passporter",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.ts",
+  "scripts": {
+    "start": "nodemon src/main.ts"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.8.10",
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
