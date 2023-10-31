@@ -1,8 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
+import { ApplicantDocument } from "../types/ApplicantDocument";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-
-const Schema = mongoose.Schema;
 
 const applicantSchema = new Schema(
   {
@@ -25,10 +24,28 @@ const applicantSchema = new Schema(
     address: {
       type: String,
     },
+    refreshToken: String,
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model("Applicants", applicantSchema);
+applicantSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  const saltRounds = 10;
+  const genSalt = await bcrypt.genSaltSync(saltRounds);
+  this.password = await bcrypt.hash(this.password, genSalt);
+  next();
+});
+
+applicantSchema.methods.isPasswordMatched = async function (
+  enteredPassword: string | Buffer
+) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+export default model<ApplicantDocument>("Applicants", applicantSchema);
