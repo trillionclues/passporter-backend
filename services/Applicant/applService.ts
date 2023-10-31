@@ -16,14 +16,8 @@ const createNewApplicant = async (body: any) => {
   }
 };
 
-const getApplicants = async () => {
-  const applicant = await Applicant.find();
-  return applicant;
-};
-
 const applicantLogin = async (data: { email: string; password: string }) => {
   const { email, password } = data;
-  console.log(data);
 
   const findApplicant = await Applicant.findOne({ email });
 
@@ -51,7 +45,12 @@ const applicantLogin = async (data: { email: string; password: string }) => {
   }
 };
 
-const getApplicant = async (data: ParamsDictionary) => {
+const getAllApplicants = async () => {
+  const applicant = await Applicant.find();
+  return applicant;
+};
+
+const getOneApplicant = async (data: ParamsDictionary) => {
   const { id } = data;
   validateMongoDBId(id);
 
@@ -59,4 +58,33 @@ const getApplicant = async (data: ParamsDictionary) => {
   return getApp;
 };
 
-export { createNewApplicant, getApplicants, getApplicant, applicantLogin };
+const updateApplicant = async (body: any) => {
+  const { _id, firstname, lastname, email } = body;
+  validateMongoDBId(_id);
+  const updateData = {
+    firstname: firstname || undefined,
+    lastname: lastname || undefined,
+    email: email || undefined,
+  };
+
+  const updatedApplicant = await Applicant.findByIdAndUpdate(_id, updateData, {
+    new: true,
+  });
+  return updatedApplicant;
+};
+
+const deleteApplicant = async (data: ParamsDictionary) => {
+  const { id } = data;
+  validateMongoDBId(id);
+  const deleteApp = await Applicant.findByIdAndDelete(id);
+  return deleteApp;
+};
+
+export {
+  createNewApplicant,
+  getAllApplicants,
+  getOneApplicant,
+  applicantLogin,
+  deleteApplicant,
+  updateApplicant,
+};

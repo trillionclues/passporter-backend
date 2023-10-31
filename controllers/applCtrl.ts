@@ -2,8 +2,10 @@ import asyncHandler from "express-async-handler";
 import {
   applicantLogin,
   createNewApplicant,
-  getApplicant,
-  getApplicants,
+  deleteApplicant,
+  getOneApplicant,
+  getAllApplicants,
+  updateApplicant,
 } from "../services/Applicant/applService";
 import { generateToken } from "../utils/jwtToken";
 
@@ -12,26 +14,6 @@ const createApplicant = asyncHandler(async (req, res) => {
     const applicantData = req.body;
     const newApplicant = await createNewApplicant(applicantData);
     res.json(newApplicant);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-});
-
-const getAllApplicants = asyncHandler(async (req, res) => {
-  try {
-    const applicants = await getApplicants();
-    res.json(applicants);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-});
-
-const getOneApplicant = asyncHandler(async (req, res) => {
-  const applicantId = req.params;
-  //   console.log(applicantId);
-  try {
-    const getOneApplicant = await getApplicant(applicantId);
-    res.json({ getOneApplicant });
   } catch (error) {
     throw new Error(error as string);
   }
@@ -57,9 +39,52 @@ const handleApplicantLogin = asyncHandler(async (req, res) => {
   }
 });
 
+const handleGetAllApplicants = asyncHandler(async (req, res) => {
+  try {
+    const applicants = await getAllApplicants();
+    res.json(applicants);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+const handleGetOneApplicant = asyncHandler(async (req, res) => {
+  const applicantId = req.params;
+  //   console.log(applicantId);
+  try {
+    const getApplicant = await getOneApplicant(applicantId);
+    res.json({ getApplicant });
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+const handleDeleteApplicant = asyncHandler(async (req, res) => {
+  const applicantId = req.params;
+
+  try {
+    const deleted = await deleteApplicant(applicantId);
+    res.json({ deleted });
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+const handleUpdateApplicant = asyncHandler(async (req, res) => {
+  try {
+    const data = req.body;
+    const updated = await updateApplicant(data);
+    res.json(updated);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
 export {
   createApplicant,
-  getAllApplicants,
-  getOneApplicant,
+  handleGetAllApplicants,
+  handleGetOneApplicant,
   handleApplicantLogin,
+  handleDeleteApplicant,
+  handleUpdateApplicant,
 };

@@ -24,7 +24,7 @@ const applicantSchema = new Schema(
     address: {
       type: String,
     },
-    refreshToken: String,
+    // refreshToken: String,
   },
   {
     timestamps: true,
