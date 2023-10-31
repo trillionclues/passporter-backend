@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 // routes
-app.use("/api/applicants/auth", authRoute);
+app.use("/api/applicant", authRoute);
 
 // error middlwares
 app.use(notFound);

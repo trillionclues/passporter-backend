@@ -1,6 +1,9 @@
 import express from "express";
-const router = express.Router();
 
-router.post("/");
+import { createApplicant, getAllApplicants } from "../controllers/applCtrl";
+
+const router = express.Router();
+router.post("/auth/register", createApplicant);
+router.get("/auth/applicants", getAllApplicants);
 
 export default router;
