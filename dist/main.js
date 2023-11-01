@@ -8,28 +8,22 @@ import authRoute from "../routes/authRoutes";
 import dbConnect from "../config/dbConnect";
 import dotenv from "dotenv";
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 4000;
 dbConnect();
-
 app.use(morgan("dev")); // timestamps in terminal
 app.use(json()); // parse HTTP request body
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
-
 app.get("/", (req, res) => {
-  res.send("Welcome to Passporter!");
+    res.send("Welcome to Passporter!");
 });
-
 // routes
 app.use("/api/applicant", authRoute);
-
 // error middlwares
 app.use(notFound);
 app.use(errorHandler);
-
 app.listen(PORT, () => {
-  console.log(`Server running on PORT ${PORT}`);
+    console.log(`Server running on PORT ${PORT}`);
 });

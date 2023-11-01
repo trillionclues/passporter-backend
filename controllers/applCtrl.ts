@@ -6,6 +6,8 @@ import {
   getOneApplicant,
   getAllApplicants,
   updateApplicant,
+  tokenRefresh,
+  logoutApplicant,
 } from "../services/Applicant/applService";
 import { generateToken } from "../utils/jwtToken";
 
@@ -34,6 +36,41 @@ const handleApplicantLogin = asyncHandler(async (req, res) => {
       lastname: applicant.lastname,
       token: generateToken(applicant._id),
     });
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+const handleTokenRefresh = asyncHandler(async (req, res) => {
+  try {
+    const cookie = req.cookies;
+    // console.log(cookie);
+
+    if (!cookie?.refreshToken)
+      throw new Error("No refresh token found in cookie!");
+    const refreshToken = cookie.refreshToken;
+    const result = await tokenRefresh(refreshToken);
+
+    res.json({ result });
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+const handleApplicantLogout = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  try {
+    const result = await logoutApplicant(refreshToken);
+    if (result.success) {
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+      });
+      res.json({ message: result.message });
+    } else {
+      res.status(400).json({ error: result.message });
+    }
   } catch (error) {
     throw new Error(error as string);
   }
@@ -87,4 +124,6 @@ export {
   handleApplicantLogin,
   handleDeleteApplicant,
   handleUpdateApplicant,
+  handleTokenRefresh,
+  handleApplicantLogout,
 };

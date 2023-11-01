@@ -7,17 +7,25 @@ import {
   handleApplicantLogin,
   handleDeleteApplicant,
   handleUpdateApplicant,
+  handleTokenRefresh,
+  handleApplicantLogout,
 } from "../controllers/applCtrl";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = express.Router();
-router.post("/auth/register", createApplicant);
+
+// applicant
+router.post("/register", createApplicant);
 router.get("/", handleGetAllApplicants);
-router.delete("/:id", handleDeleteApplicant);
+router.post("/auth/login", handleApplicantLogin);
+
+// specifics
+router.get("/refresh", handleTokenRefresh);
+router.get("/auth/logout", handleApplicantLogout);
 
 // dynamic routes
-router.get("/:id", authMiddleware, handleGetOneApplicant);
-router.post("/auth/login", handleApplicantLogin);
+router.delete("/:id", handleDeleteApplicant);
 router.put("/update-user", authMiddleware, handleUpdateApplicant);
+router.get("/:id", authMiddleware, handleGetOneApplicant);
 
 export default router;

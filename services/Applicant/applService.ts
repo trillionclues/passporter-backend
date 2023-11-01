@@ -3,6 +3,7 @@ import Applicant from "../../models/applicantModel";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { generateRefreshToken } from "../../utils/generateRefreshToken";
 import { generateToken } from "../../utils/jwtToken";
+import jwt from "jsonwebtoken";
 
 const createNewApplicant = async (body: any) => {
   const email = body.email;
@@ -42,6 +43,45 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     };
   } else {
     throw new Error("Invalid credentials!");
+  }
+};
+
+const tokenRefresh = async (refreshToken: any) => {
+  const findApplicant = await Applicant.findOne({ refreshToken });
+  if (!findApplicant) throw new Error("No refresh token found in DB");
+
+  // Verify token with jwt
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if (!JWT_SECRET) throw new Error("Wrong JWT secret code");
+
+  return new Promise((resolve, reject) => {
+    jwt.verify(refreshToken, JWT_SECRET, async (err: any, decoded: any) => {
+      if (err || findApplicant.id !== decoded?.id) {
+        reject("There is something wrong with the refresh token!");
+      }
+
+      // Generate a new access token
+      const accessToken = await generateToken(findApplicant._id);
+      resolve({ accessToken });
+    });
+  });
+};
+
+const logoutApplicant = async (refreshToken: any) => {
+  if (!refreshToken) {
+    return { success: true };
+  }
+
+  // ...find exact user and clear cookie
+  const updatedResult = await Applicant.findOneAndUpdate(
+    { refreshToken },
+    { refreshToken: "" }
+  );
+
+  if (updatedResult) {
+    return { success: true, message: "Applicant successfully logged out!" };
+  } else {
+    return { success: false, message: "Logout failed" };
   }
 };
 
@@ -87,4 +127,6 @@ export {
   applicantLogin,
   deleteApplicant,
   updateApplicant,
+  tokenRefresh,
+  logoutApplicant,
 };
