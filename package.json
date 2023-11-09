@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "main.ts",
   "scripts": {
-    "start": "nodemon src/main.ts",
-    "dev": "node src/main.ts"
+    "dev": "nodemon src/main.ts",
+    "start": "node src/main.ts"
   },
   "license": "MIT",
   "devDependencies": {
