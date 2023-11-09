@@ -1201,9 +1201,9 @@ mongodb@5.9.0:
   optionalDependencies:
     "@mongodb-js/saslprep" "^1.1.0"
 
-mongoose@*, mongoose@^7.6.4:
+mongoose@*, mongoose@^7.5.3:
   version "7.6.4"
-  resolved "https://registry.npmjs.org/mongoose/-/mongoose-7.6.4.tgz"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.6.4.tgz#2f6b796789d0d24636cd7607d7d9c7a302bb550b"
   integrity sha512-kadPkS/f5iZJrrMxxOvSoOAErXmdnb28lMvHmuYgmV1ZQTpRqpp132PIPHkJMbG4OC2H0eSXYw/fNzYTH+LUcw==
   dependencies:
     bson "^5.5.0"
