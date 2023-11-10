@@ -6,7 +6,7 @@
     "dev": "nodemon src/main.ts",
     "tsc": "./node_modules/typescript/bin/tsc",
     "start": "node dist/src/main.js",
-    "build": "tsc"
+    "build": "tsc --build"
   },
   "license": "MIT",
   "devDependencies": {
