@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./dist/src/main.js\"",
     "start": "node dist/src/main.js",
-    "build": "node dist/src/main.js"
+    "build": "tsc"
   },
   "license": "MIT",
   "devDependencies": {
