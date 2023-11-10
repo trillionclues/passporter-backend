@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "dev": "nodemon src/main.ts",
+    "dev": "tsc-watch --onSuccess \"node ./dist/src/main.js\"",
     "start": "node dist/src/main.js",
-    "build": "./node_modules/.bin/tsc"
+    "build": "node dist/src/main.js"
   },
   "license": "MIT",
   "devDependencies": {

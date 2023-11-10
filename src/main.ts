@@ -20,6 +20,7 @@ app.use(cookieParser());
 app.use(cors());
 
 app.get("/", (req, res) => {
+  console.log("test");
   res.send("Welcome to Passporter!");
 });
 
