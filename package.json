@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node ./dist/src/main.js\"",
+    "dev": "nodemon src/main.ts",
     "start": "node dist/src/main.js",
     "build": "tsc"
   },
