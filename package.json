@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nodemon src/main.ts",
     "tsc": "./node_modules/typescript/bin/tsc",
-    "start": "node dist/src/main.js",
-    "build": "tsc --build"
+    "start": "node ./dist/src/main.js",
+    "build": "tsc"
   },
   "license": "MIT",
   "devDependencies": {
