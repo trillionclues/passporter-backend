@@ -6,14 +6,19 @@ import { generateToken } from "../../utils/jwtToken";
 import jwt from "jsonwebtoken";
 
 const createNewApplicant = async (body: any) => {
-  const email = body.email;
+  const { email, password, firstname, lastname } = body;
 
   const findApplicant = await Applicant.findOne({ email: email });
   if (!findApplicant) {
-    const newApplicant = await Applicant.create(body);
+    const newApplicant = await Applicant.create({
+      email,
+      password,
+      firstname,
+      lastname,
+    });
     return newApplicant;
   } else {
-    throw new Error("Applicant already exist");
+    throw new Error("Applicant already exists");
   }
 };
 
