@@ -4,6 +4,7 @@ import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { generateRefreshToken } from "../../utils/generateRefreshToken";
 import { generateToken } from "../../utils/jwtToken";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { ApplicantDocument } from "../../types/applicant.document";
 import generateEmailBody from "../../views/emailBody";
 import { sendCustomEmail } from "../Email/email.service";
@@ -146,34 +147,60 @@ const sendPasswordResetToken = async (email: string) => {
     applicant.firstname
   );
 
-  // data obj for email ctrl
   const data = {
     to: email,
     subject: "Reset Password",
     htm: emailBody,
   };
 
-  // send the email
+  // send the email with data obj
   sendCustomEmail(data);
   return resetToken;
 };
 
-// const resetPassword = async (
-//   data: ParamsDictionary
-// ): Promise<{ success: boolean; message?: string }> => {
-//   const { resetToken, newPassword } = data;
-//   const applicant = await Applicant.findOne({ resetToken });
+const passwordResetLinkWithToken = async (
+  token: string,
+  newPassword: string
+) => {
+  if (!token) {
+    throw new Error("Token and newPassword are required.");
+  }
 
-//   if (!applicant) {
-//     throw new Error("Invalid reset token");
+  // Hash the token in request and search for user with matching passwordResetToken in DB
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const applicant = await Applicant.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!applicant) {
+    throw new Error("Token expired or invalid. Please try again.");
+  }
+
+  // Handle change password
+  applicant.password = newPassword;
+  applicant.passwordResetToken = undefined;
+  applicant.passwordResetExpires = undefined;
+
+  await applicant.save();
+  return { message: "Password reset successful!" };
+};
+
+// const changeUserPassword = async(_id: string, newPassword: string) => {
+//   validateMongoDBId(_id);
+//   const applicant: ApplicantDocument | null = await Applicant.findById(_id);
+
+//   if (newPassword) {
+//     applicant.password = newPassword;
+
+//     // update and save password
+//     const updatePassword = await applicant.save();
+//     return updatePassword;
+//   } else {
+//     return applicant;
 //   }
-
-//   applicant.password = newPassword;
-//   applicant.resetToken = undefined;
-//   await applicant.save();
-
-//   return { success: true, message: "Password reset successful" };
-// };
+// }
 
 export {
   createNewApplicant,
@@ -185,4 +212,5 @@ export {
   tokenRefresh,
   logoutApplicant,
   sendPasswordResetToken,
+  passwordResetLinkWithToken,
 };

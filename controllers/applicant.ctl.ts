@@ -9,8 +9,10 @@ import {
   tokenRefresh,
   logoutApplicant,
   sendPasswordResetToken,
+  passwordResetLinkWithToken,
 } from "../services/Applicant/applicant.service";
 import { generateToken } from "../utils/jwtToken";
+import { StringExpressionOperatorReturningString } from "mongoose";
 
 const createApplicant = asyncHandler(async (req, res) => {
   try {
@@ -128,16 +130,17 @@ const handleSendPasswordResetToken = asyncHandler(async (req, res) => {
   }
 });
 
-// const handleResetPassword = asyncHandler(async (req, res) => {
-//   const { resetToken, newPassword } = req.body;
-
-//   try {
-//     const result = await resetPassword({ resetToken, newPassword });
-//     res.json(result);
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// });
+const handleResetLinkWithToken = asyncHandler(async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const { token } = req.params;
+    const result = await passwordResetLinkWithToken(token, newPassword);
+    res.json(result);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+    throw new Error(error);
+  }
+});
 
 export {
   createApplicant,
@@ -149,4 +152,5 @@ export {
   handleTokenRefresh,
   handleApplicantLogout,
   handleSendPasswordResetToken,
+  handleResetLinkWithToken,
 };

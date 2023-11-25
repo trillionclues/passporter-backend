@@ -20,6 +20,7 @@ router.post("/register", createApplicant);
 router.get("/", handleGetAllApplicants);
 router.post("/auth/login", handleApplicantLogin);
 router.post("/auth/reset-password/send-token", handleSendPasswordResetToken);
+router.put("/auth/reset-password/:token", handleSendPasswordResetToken);
 
 // specifics
 router.get("/refresh", handleTokenRefresh);

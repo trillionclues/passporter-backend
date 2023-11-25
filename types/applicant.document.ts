@@ -10,4 +10,5 @@ export interface ApplicantDocument extends Document {
   createPasswordResetToken(): Promise<string>;
   passwordChangedAt?: Date;
   passwordResetToken?: string;
+  passwordResetExpires?: Date
 }
