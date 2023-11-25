@@ -1,9 +1,12 @@
 import { ParamsDictionary } from "express-serve-static-core";
-import Applicant from "../../models/applicantModel";
+import Applicant from "../../models/ApplicantModel/applicant.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { generateRefreshToken } from "../../utils/generateRefreshToken";
 import { generateToken } from "../../utils/jwtToken";
 import jwt from "jsonwebtoken";
+import { ApplicantDocument } from "../../types/applicant.document";
+import generateEmailBody from "../../views/emailBody";
+import { sendCustomEmail } from "../Email/email.service";
 
 const createNewApplicant = async (body: any) => {
   const { email, password, firstname, lastname } = body;
@@ -125,6 +128,53 @@ const deleteApplicant = async (data: ParamsDictionary) => {
   return deleteApp;
 };
 
+const sendPasswordResetToken = async (email: string) => {
+  const applicant: ApplicantDocument | null = await Applicant.findOne({
+    email,
+  });
+  if (!applicant) {
+    throw new Error("Applicant not found!");
+  }
+  const resetToken = await applicant.createPasswordResetToken();
+  await applicant.save();
+
+  // reset password url
+  const buttonText = "Reset Password";
+  const emailBody = generateEmailBody(
+    resetToken,
+    buttonText,
+    applicant.firstname
+  );
+
+  // data obj for email ctrl
+  const data = {
+    to: email,
+    subject: "Reset Password",
+    htm: emailBody,
+  };
+
+  // send the email
+  sendCustomEmail(data);
+  return resetToken;
+};
+
+// const resetPassword = async (
+//   data: ParamsDictionary
+// ): Promise<{ success: boolean; message?: string }> => {
+//   const { resetToken, newPassword } = data;
+//   const applicant = await Applicant.findOne({ resetToken });
+
+//   if (!applicant) {
+//     throw new Error("Invalid reset token");
+//   }
+
+//   applicant.password = newPassword;
+//   applicant.resetToken = undefined;
+//   await applicant.save();
+
+//   return { success: true, message: "Password reset successful" };
+// };
+
 export {
   createNewApplicant,
   getAllApplicants,
@@ -134,4 +184,5 @@ export {
   updateApplicant,
   tokenRefresh,
   logoutApplicant,
+  sendPasswordResetToken,
 };

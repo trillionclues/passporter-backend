@@ -4,7 +4,7 @@ import morgan from "morgan";
 import { json, urlencoded } from "body-parser";
 import { errorHandler, notFound } from "../middlewares/errorHandler";
 import cookieParser from "cookie-parser";
-import authRoute from "../routes/authRoutes";
+import authRoute from "../routes/auth.routes";
 import dbConnect from "../config/dbConnect";
 import dotenv from "dotenv";
 dotenv.config();

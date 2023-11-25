@@ -9,7 +9,8 @@ import {
   handleUpdateApplicant,
   handleTokenRefresh,
   handleApplicantLogout,
-} from "../controllers/applCtrl";
+  handleSendPasswordResetToken,
+} from "../controllers/applicant.ctl";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const router = express.Router();
 router.post("/register", createApplicant);
 router.get("/", handleGetAllApplicants);
 router.post("/auth/login", handleApplicantLogin);
+router.post("/auth/reset-password/send-token", handleSendPasswordResetToken);
 
 // specifics
 router.get("/refresh", handleTokenRefresh);

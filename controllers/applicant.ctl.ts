@@ -8,7 +8,8 @@ import {
   updateApplicant,
   tokenRefresh,
   logoutApplicant,
-} from "../services/Applicant/applService";
+  sendPasswordResetToken,
+} from "../services/Applicant/applicant.service";
 import { generateToken } from "../utils/jwtToken";
 
 const createApplicant = asyncHandler(async (req, res) => {
@@ -109,13 +110,34 @@ const handleDeleteApplicant = asyncHandler(async (req, res) => {
 
 const handleUpdateApplicant = asyncHandler(async (req, res) => {
   try {
-    const data = req.body;
-    const updated = await updateApplicant(data);
+    const { email } = req.body;
+    const updated = await updateApplicant({ email });
     res.json(updated);
   } catch (error) {
     throw new Error(error as string);
   }
 });
+
+const handleSendPasswordResetToken = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  try {
+    const result = await sendPasswordResetToken(email);
+    res.json(result);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+// const handleResetPassword = asyncHandler(async (req, res) => {
+//   const { resetToken, newPassword } = req.body;
+
+//   try {
+//     const result = await resetPassword({ resetToken, newPassword });
+//     res.json(result);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// });
 
 export {
   createApplicant,
@@ -126,4 +148,5 @@ export {
   handleUpdateApplicant,
   handleTokenRefresh,
   handleApplicantLogout,
+  handleSendPasswordResetToken,
 };

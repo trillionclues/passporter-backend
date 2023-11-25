@@ -1,4 +1,4 @@
-import Applicant from "../models/applicantModel";
+import Applicant from "../models/ApplicantModel/applicant.model";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import { CustomRequest } from "../types/CustomRequest";
@@ -27,6 +27,7 @@ const authMiddleware = asyncHandler(async (req: CustomRequest, res, next) => {
       }
     } catch (error) {
       next(error);
+      throw new Error("Not authorized, token failed");
     }
   } else {
     throw new Error("There is no token attached to header");
