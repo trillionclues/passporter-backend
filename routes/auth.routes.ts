@@ -10,6 +10,7 @@ import {
   handleTokenRefresh,
   handleApplicantLogout,
   handleSendPasswordResetToken,
+  handleResetLinkWithToken,
 } from "../controllers/applicant.ctl";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
@@ -20,7 +21,7 @@ router.post("/register", createApplicant);
 router.get("/", handleGetAllApplicants);
 router.post("/auth/login", handleApplicantLogin);
 router.post("/auth/reset-password/send-token", handleSendPasswordResetToken);
-router.put("/auth/reset-password/:token", handleSendPasswordResetToken);
+router.put("/auth/reset-password/:token", handleResetLinkWithToken);
 
 // specifics
 router.get("/refresh", handleTokenRefresh);
