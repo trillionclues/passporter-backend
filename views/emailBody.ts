@@ -1,5 +1,5 @@
 const emailBody = (token: string, buttonText: string, firstname: string) => {
-  const resetUrl = `http://localhost:3000/reset-password?token=${token}`;
+  const resetUrl = `https://passporter-client.vercel.app/reset-password?token=${token}`;
   const emailText = `<!DOCTYPE html>
     <html lang="en">
     <head>
