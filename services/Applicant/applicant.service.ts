@@ -27,9 +27,22 @@ const createNewApplicant = async (body: any) => {
 };
 
 const applicantLogin = async (data: { email: string; password: string }) => {
+  // filter user data
+  const filterSensitiveProperties = (user: any) => {
+    const sensitiveProperties = ["password"];
+    const filteredUser = { ...user };
+
+    sensitiveProperties.forEach((property) => {
+      delete filteredUser[property];
+    });
+
+    return filteredUser;
+  };
+
   const { email, password } = data;
 
   const findApplicant = await Applicant.findOne({ email });
+  const filteredUser = filterSensitiveProperties(findApplicant);
 
   if (findApplicant && (await findApplicant.isPasswordMatched(password))) {
     const refreshToken = await generateRefreshToken(findApplicant?._id);
@@ -44,9 +57,10 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     );
 
     return {
-      _id: findApplicant?._id,
-      firstname: findApplicant?.firstname,
-      lastname: findApplicant?.lastname,
+      ...filteredUser,
+      // _id: findApplicant?._id,
+      // firstname: findApplicant?.firstname,
+      // lastname: findApplicant?.lastname,
       token: generateToken(findApplicant?._id),
       refreshToken,
     };
