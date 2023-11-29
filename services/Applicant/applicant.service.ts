@@ -45,7 +45,7 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     );
 
     // get profile picture
-    let profilePictureUrl;
+    let profilePictureUrl: any;
 
     if (findApplicant.profilePictureUrl) {
       profilePictureUrl = findApplicant?.profilePictureUrl;

@@ -34,11 +34,11 @@ const handleApplicantLogin = asyncHandler(async (req, res) => {
     });
 
     res.json({
-      ...applicant,
-      // _id: applicant._id,
-      // firstname: applicant.firstname,
-      // lastname: applicant.lastname,
-      // token: generateToken(applicant._id),
+      _id: applicant._id,
+      firstname: applicant.firstname,
+      lastname: applicant.lastname,
+      profilePicture: applicant.profilePictureUrl,
+      token: generateToken(applicant._id),
     });
   } catch (error) {
     throw new Error(error as string);
