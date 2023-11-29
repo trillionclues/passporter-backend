@@ -50,7 +50,7 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     if (findApplicant.profilePictureUrl) {
       profilePictureUrl = findApplicant?.profilePictureUrl;
     } else {
-      const randomImageUrl = faker.image.avatar();
+      const randomImageUrl = faker.image.avatarGitHub();
       profilePictureUrl = randomImageUrl;
     }
 
