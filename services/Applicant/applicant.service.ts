@@ -8,6 +8,7 @@ import crypto from "crypto";
 import { ApplicantDocument } from "../../types/applicant.document";
 import generateEmailBody from "../../views/emailBody";
 import { sendCustomEmail } from "../Email/email.service";
+import { faker } from "@faker-js/faker";
 
 const createNewApplicant = async (body: any) => {
   const { email, password, firstname, lastname } = body;
@@ -27,22 +28,9 @@ const createNewApplicant = async (body: any) => {
 };
 
 const applicantLogin = async (data: { email: string; password: string }) => {
-  // filter user data
-  const filterSensitiveProperties = (user: any) => {
-    const sensitiveProperties = ["password"];
-    const filteredUser = { ...user };
-
-    sensitiveProperties.forEach((property) => {
-      delete filteredUser[property];
-    });
-
-    return filteredUser;
-  };
-
   const { email, password } = data;
 
   const findApplicant = await Applicant.findOne({ email });
-  const filteredUser = filterSensitiveProperties(findApplicant);
 
   if (findApplicant && (await findApplicant.isPasswordMatched(password))) {
     const refreshToken = await generateRefreshToken(findApplicant?._id);
@@ -56,11 +44,21 @@ const applicantLogin = async (data: { email: string; password: string }) => {
       }
     );
 
+    // get profile picture
+    let profilePictureUrl;
+
+    if (findApplicant.profilePictureUrl) {
+      profilePictureUrl = findApplicant?.profilePictureUrl;
+    } else {
+      const randomImageUrl = faker.image.avatar();
+      profilePictureUrl = randomImageUrl;
+    }
+
     return {
-      ...filteredUser,
-      // _id: findApplicant?._id,
-      // firstname: findApplicant?.firstname,
-      // lastname: findApplicant?.lastname,
+      _id: findApplicant?._id,
+      firstname: findApplicant?.firstname,
+      lastname: findApplicant?.lastname,
+      profilePictureUrl,
       token: generateToken(findApplicant?._id),
       refreshToken,
     };

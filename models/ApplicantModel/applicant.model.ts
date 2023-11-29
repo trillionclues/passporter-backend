@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { ApplicantDocument } from "../../types/applicant.document";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -16,13 +16,30 @@ const applicantSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
     },
-    address: {
+    profilePicture: {
       type: String,
+      default: "",
+    },
+    role: {
+      type: String,
+      default: "applicant",
+    },
+    applications: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Application",
+      },
+    ],
+    queueStatus: {
+      type: String,
+      enum: ["InQueue", "Reviewed"],
+      default: "InQueue",
     },
     refreshToken: {
       type: String,
