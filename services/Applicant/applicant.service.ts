@@ -199,21 +199,6 @@ const passwordResetLinkWithToken = async (
   return { message: "Password reset successful!" };
 };
 
-// const changeUserPassword = async(_id: string, newPassword: string) => {
-//   validateMongoDBId(_id);
-//   const applicant: ApplicantDocument | null = await Applicant.findById(_id);
-
-//   if (newPassword) {
-//     applicant.password = newPassword;
-
-//     // update and save password
-//     const updatePassword = await applicant.save();
-//     return updatePassword;
-//   } else {
-//     return applicant;
-//   }
-// }
-
 export {
   createNewApplicant,
   getAllApplicants,
