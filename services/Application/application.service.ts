@@ -1,9 +1,8 @@
 import Applicant from "../../models/ApplicantModel/applicant.model";
 import Application from "../../models/Applications/application.model";
-import { ApplicationDocument } from "../../types/application.document";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 
-const createNewApplication = async (applicantId: any, applicationData: any) => {
+const createNewApplication = async (applicationData: any, applicantId: any) => {
   validateMongoDBId(applicantId);
 
   // Start a MongoDB transaction
@@ -11,11 +10,6 @@ const createNewApplication = async (applicantId: any, applicationData: any) => {
   session.startTransaction();
 
   try {
-    const applicant = await Applicant.findById(applicantId);
-    if (!applicant) {
-      throw new Error("Applicant not found. Unable to create application.");
-    }
-
     // Check if applicant already has an application of the same type
     const existingApplication = await Application.findOne({
       applicant: applicantId,
@@ -26,7 +20,6 @@ const createNewApplication = async (applicantId: any, applicationData: any) => {
       throw new Error("You already have an application of this type!");
     }
 
-    // Create application
     const newApplication = await Application.create({
       applicant: applicantId,
       ...applicationData,
