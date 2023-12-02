@@ -10,17 +10,29 @@ const applicationSchema = new Schema(
     },
     reviewStatus: {
       type: String,
-      enum: ["Pending", "Approved", "Rejected"],
+      enum: ["Pending", "Processing", "Approved", "Rejected"],
       default: "Pending",
     },
     applicationType: {
       type: String,
-      enum: ["Passport", "Visa"],
-      default: "Passport",
+      enum: ["None", "Passport", "Visa"],
+      default: "None",
+    },
+    passportNumber: {
+      type: String,
+    },
+    visaNumber: {
+      type: String,
     },
     queuePosition: {
       type: Number,
       default: 0,
+    },
+    expirationDate: {
+      type: Date,
+    },
+    notes: {
+      type: String,
     },
   },
   {

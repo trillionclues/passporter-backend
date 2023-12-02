@@ -1,5 +1,6 @@
 import { ParamsDictionary } from "express-serve-static-core";
 import Applicant from "../../models/ApplicantModel/applicant.model";
+import Application from "../../models/Applications/application.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { generateRefreshToken } from "../../utils/generateRefreshToken";
 import { generateToken } from "../../utils/jwtToken";
@@ -28,6 +29,20 @@ const createNewApplicant = async (body: ApplicantDocument) => {
   }
 };
 
+const getAllApplicants = async () => {
+  const applicant = await Applicant.find();
+  return applicant;
+};
+
+const getOneApplicant = async (data: ParamsDictionary) => {
+  const { id } = data;
+  validateMongoDBId(id);
+
+  const getApp = await Applicant.findById(id);
+  return getApp;
+};
+
+// Applicant Service Auth
 const applicantLogin = async (data: { email: string; password: string }) => {
   const { email, password } = data;
 
@@ -105,47 +120,6 @@ const logoutApplicant = async (refreshToken: any) => {
   }
 };
 
-const getAllApplicants = async () => {
-  const applicant = await Applicant.find();
-  return applicant;
-};
-
-const getOneApplicant = async (data: ParamsDictionary) => {
-  const { id } = data;
-  validateMongoDBId(id);
-
-  const getApp = await Applicant.findById(id);
-  return getApp;
-};
-
-const updateApplicant = async (data: any, applicantId: any) => {
-  const { firstname, lastname, email } = data;
-  validateMongoDBId(applicantId);
-
-  // Object with updated defined fields
-  const updateData: any = {
-    firstname: firstname || undefined,
-    lastname: lastname || undefined,
-    email: email || undefined,
-  };
-
-  const updatedApplicant = await Applicant.findByIdAndUpdate(
-    applicantId,
-    updateData,
-    {
-      new: true,
-    }
-  );
-  return updatedApplicant;
-};
-
-// const deleteApplicant = async (data: ParamsDictionary) => {
-//   const { id } = data;
-//   validateMongoDBId(id);
-//   const deleteApp = await Applicant.findByIdAndDelete(id);
-//   return deleteApp;
-// };
-
 const sendPasswordResetToken = async (email: string) => {
   const applicant: ApplicantDocument | null = await Applicant.findOne({
     email,
@@ -203,6 +177,57 @@ const passwordResetLinkWithToken = async (
   await applicant.save();
   return { message: "Password reset successful!" };
 };
+
+// Update Profile
+const updateApplicant = async (data: any, applicantId: any) => {
+  const { firstname, lastname, email } = data;
+  validateMongoDBId(applicantId);
+
+  // Object with updated defined fields
+  const updateData: any = {
+    firstname: firstname || undefined,
+    lastname: lastname || undefined,
+    email: email || undefined,
+  };
+
+  const updatedApplicant = await Applicant.findByIdAndUpdate(
+    applicantId,
+    updateData,
+    {
+      new: true,
+    }
+  );
+  return updatedApplicant;
+};
+
+const updateProfilePicture = async (
+  applicantId: string,
+  profilePictureUrl: string
+) => {
+  const applicant = await Applicant.findByIdAndUpdate(
+    applicantId,
+    { profilePicture: profilePictureUrl },
+    { new: true }
+  );
+  return applicant;
+};
+
+// Manage Application
+// const submitApplication = async (applicantId: string, applicationData: any) => {
+//   // Create and link the application to the applicant
+//   const application = await Application.create({ applicantId, ...applicationData });
+//   const applicant = await Applicant.findByIdAndUpdate(applicantId, { $push: { applications: application._id } }, { new: true });
+
+//   return { applicant, application };
+// };
+
+// Delete Profile
+// const deleteApplicant = async (data: ParamsDictionary) => {
+//   const { id } = data;
+//   validateMongoDBId(id);
+//   const deleteApp = await Applicant.findByIdAndDelete(id);
+//   return deleteApp;
+// };
 
 export {
   createNewApplicant,

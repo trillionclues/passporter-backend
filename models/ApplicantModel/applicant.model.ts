@@ -22,6 +22,21 @@ const applicantSchema = new Schema(
       type: String,
       required: true,
     },
+    address: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    gender: {
+      type: String,
+    },
+    nationality: {
+      type: String,
+    },
     profilePicture: {
       type: String,
       default: "",

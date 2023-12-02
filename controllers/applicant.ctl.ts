@@ -11,7 +11,6 @@ import {
   sendPasswordResetToken,
   passwordResetLinkWithToken,
 } from "../services/Applicant/applicant.service";
-import { generateToken } from "../utils/jwtToken";
 import { CustomRequest } from "../types/CustomRequest";
 
 const createApplicant = asyncHandler(async (req, res) => {
@@ -24,6 +23,37 @@ const createApplicant = asyncHandler(async (req, res) => {
   }
 });
 
+const handleGetAllApplicants = asyncHandler(async (req, res) => {
+  try {
+    const applicants = await getAllApplicants();
+    res.json(applicants);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+const handleGetOneApplicant = asyncHandler(async (req, res) => {
+  const applicantId = req.params;
+  try {
+    const getApplicant = await getOneApplicant(applicantId);
+    res.json({ getApplicant });
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+// const handleDeleteApplicant = asyncHandler(async (req, res) => {
+//   const applicantId = req.params;
+
+//   try {
+//     const deleted = await deleteApplicant(applicantId);
+//     res.json({ deleted });
+//   } catch (error) {
+//     throw new Error(error as string);
+//   }
+// });
+
+// Applicant Controller Auth
 const handleApplicantLogin = asyncHandler(async (req, res) => {
   try {
     const applicant = await applicantLogin(req.body);
@@ -43,7 +73,6 @@ const handleApplicantLogin = asyncHandler(async (req, res) => {
 const handleTokenRefresh = asyncHandler(async (req, res) => {
   try {
     const cookie = req.cookies;
-    // console.log(cookie);
 
     if (!cookie?.refreshToken)
       throw new Error("No refresh token found in cookie!");
@@ -75,49 +104,6 @@ const handleApplicantLogout = asyncHandler(async (req, res) => {
   }
 });
 
-const handleGetAllApplicants = asyncHandler(async (req, res) => {
-  try {
-    const applicants = await getAllApplicants();
-    res.json(applicants);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-});
-
-const handleGetOneApplicant = asyncHandler(async (req, res) => {
-  const applicantId = req.params;
-  //   console.log(applicantId);
-  try {
-    const getApplicant = await getOneApplicant(applicantId);
-    res.json({ getApplicant });
-  } catch (error) {
-    throw new Error(error as string);
-  }
-});
-
-// const handleDeleteApplicant = asyncHandler(async (req, res) => {
-//   const applicantId = req.params;
-
-//   try {
-//     const deleted = await deleteApplicant(applicantId);
-//     res.json({ deleted });
-//   } catch (error) {
-//     throw new Error(error as string);
-//   }
-// });
-
-const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
-  try {
-    const data = req.body;
-    const applicantId = req.applicant?._id?.toString();
-
-    const updated = await updateApplicant(data, applicantId);
-    res.json(updated);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-});
-
 const handleSendPasswordResetToken = asyncHandler(async (req, res) => {
   const { email } = req.body;
   try {
@@ -139,6 +125,25 @@ const handleResetLinkWithToken = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+// Update Profile
+const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
+  try {
+    const data = req.body;
+    const applicantId = req.applicant?._id?.toString();
+
+    const updated = await updateApplicant(data, applicantId);
+    res.json(updated);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+// const hnupdateProfilePicture = asyncHandler(async (req: CustomRequest, res) => {
+
+// })
+
+// const applicantWithApplications = await Applicant.findById(applicantId).populate('applications');
 
 export {
   createApplicant,

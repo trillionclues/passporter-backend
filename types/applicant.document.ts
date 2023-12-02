@@ -16,4 +16,6 @@ export interface ApplicantDocument extends Document {
   queueStatus: "InQueue" | "Reviewed";
   refreshToken?: string;
   _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

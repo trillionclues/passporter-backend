@@ -5,6 +5,7 @@ import { json, urlencoded } from "body-parser";
 import { errorHandler, notFound } from "../middlewares/errorHandler";
 import cookieParser from "cookie-parser";
 import authRoute from "../routes/auth.routes";
+import applicationRoute from "../routes/application.routes";
 import dbConnect from "../config/dbConnect";
 import dotenv from "dotenv";
 dotenv.config();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 
 // routes
 app.use("/api/applicant", authRoute);
+app.use("/api/application", applicationRoute);
 
 // error middlwares
 app.use(notFound);
