@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import {
   applicantLogin,
   createNewApplicant,
-  deleteApplicant,
+  // deleteApplicant,
   getOneApplicant,
   getAllApplicants,
   updateApplicant,
@@ -12,7 +12,7 @@ import {
   passwordResetLinkWithToken,
 } from "../services/Applicant/applicant.service";
 import { generateToken } from "../utils/jwtToken";
-import { StringExpressionOperatorReturningString } from "mongoose";
+import { CustomRequest } from "../types/CustomRequest";
 
 const createApplicant = asyncHandler(async (req, res) => {
   try {
@@ -27,19 +27,14 @@ const createApplicant = asyncHandler(async (req, res) => {
 const handleApplicantLogin = asyncHandler(async (req, res) => {
   try {
     const applicant = await applicantLogin(req.body);
+    // const applicantId = await getOneApplicant(applicant.);
 
     res.cookie("refreshToken", applicant.refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000, // 72hrs
     });
 
-    res.json({
-      _id: applicant._id,
-      firstname: applicant.firstname,
-      lastname: applicant.lastname,
-      profilePicture: applicant.profilePictureUrl,
-      token: generateToken(applicant._id),
-    });
+    res.json(applicant);
   } catch (error) {
     throw new Error(error as string);
   }
@@ -100,21 +95,24 @@ const handleGetOneApplicant = asyncHandler(async (req, res) => {
   }
 });
 
-const handleDeleteApplicant = asyncHandler(async (req, res) => {
-  const applicantId = req.params;
+// const handleDeleteApplicant = asyncHandler(async (req, res) => {
+//   const applicantId = req.params;
 
-  try {
-    const deleted = await deleteApplicant(applicantId);
-    res.json({ deleted });
-  } catch (error) {
-    throw new Error(error as string);
-  }
-});
+//   try {
+//     const deleted = await deleteApplicant(applicantId);
+//     res.json({ deleted });
+//   } catch (error) {
+//     throw new Error(error as string);
+//   }
+// });
 
-const handleUpdateApplicant = asyncHandler(async (req, res) => {
+const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
   try {
     const { email } = req.body;
-    const updated = await updateApplicant({ email });
+    const applicantId = req.applicant?._id?.toString();
+    console.log(email, applicantId);
+
+    const updated = await updateApplicant({ email }, applicantId);
     res.json(updated);
   } catch (error) {
     throw new Error(error as string);
@@ -148,7 +146,7 @@ export {
   handleGetAllApplicants,
   handleGetOneApplicant,
   handleApplicantLogin,
-  handleDeleteApplicant,
+  // handleDeleteApplicant,
   handleUpdateApplicant,
   handleTokenRefresh,
   handleApplicantLogout,

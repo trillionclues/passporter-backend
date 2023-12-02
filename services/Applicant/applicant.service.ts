@@ -10,10 +10,11 @@ import generateEmailBody from "../../views/emailBody";
 import { sendCustomEmail } from "../Email/email.service";
 import { faker } from "@faker-js/faker";
 
-const createNewApplicant = async (body: any) => {
+const createNewApplicant = async (body: ApplicantDocument) => {
   const { email, password, firstname, lastname } = body;
 
   const findApplicant = await Applicant.findOne({ email: email });
+
   if (!findApplicant) {
     const newApplicant = await Applicant.create({
       email,
@@ -31,6 +32,7 @@ const applicantLogin = async (data: { email: string; password: string }) => {
   const { email, password } = data;
 
   const findApplicant = await Applicant.findOne({ email });
+  const applicantId = findApplicant?._id;
 
   if (findApplicant && (await findApplicant.isPasswordMatched(password))) {
     const refreshToken = await generateRefreshToken(findApplicant?._id);
@@ -55,11 +57,8 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     }
 
     return {
-      _id: findApplicant?._id,
-      firstname: findApplicant?.firstname,
-      lastname: findApplicant?.lastname,
       profilePictureUrl,
-      token: generateToken(findApplicant?._id),
+      token: generateToken(applicantId),
       refreshToken,
     };
   } else {
@@ -119,27 +118,31 @@ const getOneApplicant = async (data: ParamsDictionary) => {
   return getApp;
 };
 
-const updateApplicant = async (body: any) => {
-  const { _id, firstname, lastname, email } = body;
-  validateMongoDBId(_id);
+const updateApplicant = async (body: any, applicantId: any) => {
+  const { firstname, lastname, email } = body;
+  validateMongoDBId(applicantId);
   const updateData = {
     firstname: firstname || undefined,
     lastname: lastname || undefined,
     email: email || undefined,
   };
 
-  const updatedApplicant = await Applicant.findByIdAndUpdate(_id, updateData, {
-    new: true,
-  });
+  const updatedApplicant = await Applicant.findByIdAndUpdate(
+    applicantId,
+    updateData,
+    {
+      new: true,
+    }
+  );
   return updatedApplicant;
 };
 
-const deleteApplicant = async (data: ParamsDictionary) => {
-  const { id } = data;
-  validateMongoDBId(id);
-  const deleteApp = await Applicant.findByIdAndDelete(id);
-  return deleteApp;
-};
+// const deleteApplicant = async (data: ParamsDictionary) => {
+//   const { id } = data;
+//   validateMongoDBId(id);
+//   const deleteApp = await Applicant.findByIdAndDelete(id);
+//   return deleteApp;
+// };
 
 const sendPasswordResetToken = async (email: string) => {
   const applicant: ApplicantDocument | null = await Applicant.findOne({
@@ -204,7 +207,7 @@ export {
   getAllApplicants,
   getOneApplicant,
   applicantLogin,
-  deleteApplicant,
+  // deleteApplicant,
   updateApplicant,
   tokenRefresh,
   logoutApplicant,

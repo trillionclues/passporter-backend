@@ -36,11 +36,6 @@ const applicantSchema = new Schema(
         ref: "Application",
       },
     ],
-    queueStatus: {
-      type: String,
-      enum: ["InQueue", "Reviewed"],
-      default: "InQueue",
-    },
     refreshToken: {
       type: String,
     },

@@ -1,8 +1,9 @@
 import Applicant from "../models/ApplicantModel/applicant.model";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
-import { CustomRequest } from "../types/CustomRequest";
+
 import dotenv from "dotenv";
+import { CustomRequest } from "../types/CustomRequest";
 dotenv.config();
 
 const JWT = process.env.JWT_SECRET;
@@ -22,6 +23,7 @@ const authMiddleware = asyncHandler(async (req: CustomRequest, res, next) => {
         const applicant = await Applicant.findById(decoded?.id);
         if (applicant) {
           req.applicant = applicant;
+
           next();
         }
       }

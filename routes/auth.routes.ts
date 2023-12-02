@@ -5,7 +5,7 @@ import {
   handleGetAllApplicants,
   handleGetOneApplicant,
   handleApplicantLogin,
-  handleDeleteApplicant,
+  // handleDeleteApplicant,
   handleUpdateApplicant,
   handleTokenRefresh,
   handleApplicantLogout,
@@ -28,7 +28,7 @@ router.get("/refresh", handleTokenRefresh);
 router.get("/auth/logout", handleApplicantLogout);
 
 // dynamic routes
-router.delete("/:id", handleDeleteApplicant);
+// router.delete("/:id", handleDeleteApplicant);
 router.put("/update-user", authMiddleware, handleUpdateApplicant);
 router.get("/:id", authMiddleware, handleGetOneApplicant);
 
