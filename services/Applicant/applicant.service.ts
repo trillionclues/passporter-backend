@@ -118,10 +118,12 @@ const getOneApplicant = async (data: ParamsDictionary) => {
   return getApp;
 };
 
-const updateApplicant = async (body: any, applicantId: any) => {
-  const { firstname, lastname, email } = body;
+const updateApplicant = async (data: any, applicantId: any) => {
+  const { firstname, lastname, email } = data;
   validateMongoDBId(applicantId);
-  const updateData = {
+
+  // Object with updated defined fields
+  const updateData: any = {
     firstname: firstname || undefined,
     lastname: lastname || undefined,
     email: email || undefined,

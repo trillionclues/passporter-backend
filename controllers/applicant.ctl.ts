@@ -108,11 +108,10 @@ const handleGetOneApplicant = asyncHandler(async (req, res) => {
 
 const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
   try {
-    const { email } = req.body;
+    const data = req.body;
     const applicantId = req.applicant?._id?.toString();
-    console.log(email, applicantId);
 
-    const updated = await updateApplicant({ email }, applicantId);
+    const updated = await updateApplicant(data, applicantId);
     res.json(updated);
   } catch (error) {
     throw new Error(error as string);
