@@ -6,7 +6,7 @@ import { createNewApplication } from "../services/Application/application.servic
 const createApplicationHandler = asyncHandler(
   async (req: CustomRequest, res) => {
     const applicantId = req.applicant?._id?.toString();
-    console.log("Applicant ID:", applicantId);
+    // console.log("Applicant ID:", applicantId);
     const applicationData: ApplicationDocument = req.body;
 
     try {
