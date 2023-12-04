@@ -6,7 +6,12 @@ import Application from "../models/Applications/application.model";
 const createApplicationHandler = asyncHandler(
   async (req: CustomRequest, res) => {
     const applicantId = req.applicant?._id?.toString();
-    console.log(applicantId);
+
+    // ****** BUG *******
+    // uniqueness constraint on applicationType is causing the error even though the applications were created by different users
+    // But i need the unique property so the applicant can only create one type of eother passport or visa application
+    // ****** BUG *******
+
     if (!applicantId) {
       throw new Error("Invalid applicantId");
     }
@@ -16,10 +21,8 @@ const createApplicationHandler = asyncHandler(
     try {
       // Check if applicant already has an application of the same type
       const existingApplication = await Application.findOne({
-        applicant: applicantId,
-        applicationType: applicationData.applicationType
-          .toString()
-          .toLowerCase(),
+        applicantId: applicantId,
+        applicationType: applicationData.applicationType.toLowerCase(),
       });
 
       if (existingApplication) {

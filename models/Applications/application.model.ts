@@ -42,3 +42,17 @@ const applicationSchema = new Schema(
 );
 
 export default model<ApplicationDocument>("Application", applicationSchema);
+
+// //  MIGHT NEED A HOOK FORN THIS
+// applicationSchema.pre("save", async function (next) {
+//   const existingApplication = await Application.findOne({
+//     applicant: this.applicantId,
+//     applicationType: this.applicationType,
+//   });
+
+//   if (existingApplication) {
+//     throw new Error("You already have an application of this type!");
+//   }
+
+//   next();
+// });
