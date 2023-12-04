@@ -17,6 +17,7 @@ const applicationSchema = new Schema(
       type: String,
       enum: ["None", "Passport", "Visa"],
       default: "None",
+      unique: true,
     },
     passportNumber: {
       type: String,
