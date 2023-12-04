@@ -6,7 +6,7 @@ import Application from "../models/Applications/application.model";
 const createApplicationHandler = asyncHandler(
   async (req: CustomRequest, res) => {
     const applicantId = req.applicant?._id?.toString();
-
+    console.log(applicantId);
     if (!applicantId) {
       throw new Error("Invalid applicantId");
     }
@@ -40,6 +40,7 @@ const createApplicationHandler = asyncHandler(
 
       res.json(newApplication);
     } catch (error: any) {
+      // handle mongodb duplicate error
       if (
         error.name === "MongoServerError" &&
         error.code === 11000 &&
