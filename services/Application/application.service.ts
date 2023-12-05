@@ -2,14 +2,13 @@ import Applicant from "../../models/ApplicantModel/applicant.model";
 import ApplicationQueue from "../../models/Application Queue/applicationqueue.model";
 import Application from "../../models/Applications/application.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
+import { enqueueApplication } from "../Application Queue/applicationQueue. service";
 
 const createNewApplication = async (
   applicationData: any,
   applicantId: string
 ) => {
   validateMongoDBId(applicantId);
-  console.log(applicationData);
-  console.log(applicantId);
 
   // Start a MongoDB transaction
   const session = await Application.startSession();
@@ -34,18 +33,8 @@ const createNewApplication = async (
       queuePosition: newQueuePosition,
     });
 
-    // Update applicant with new application
-    await Applicant.findByIdAndUpdate(
-      applicantId,
-      {
-        $push: {
-          applications: newApplication._id,
-        },
-      },
-      {
-        new: true,
-      }
-    );
+    // Enqueue the newly created application and save
+    await enqueueApplication(newApplication._id);
 
     // Commit the transaction
     await session.commitTransaction();
@@ -61,13 +50,18 @@ const createNewApplication = async (
 
 export { createNewApplication };
 
-// Enqueue the new application ID
+// *** BUG ***** //
+// Error updated and saving applicationqueue records
 // await ApplicationQueue.findOneAndUpdate(
-//   { applicantId: applicantId },
+//   {},
 //   {
 //     $push: {
-//       applicationIds: newApplication?._id,
+//       applicationIds: newApplication._id,
 //     },
 //   },
-//   { upsert: true }
+//   {
+//     upsert: true,
+//   }
 // );
+
+//

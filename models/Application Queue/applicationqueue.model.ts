@@ -28,18 +28,6 @@ applicationQueueSchema.pre("validate", async function (next) {
   next();
 });
 
-//   applicationQueueSchema.pre("save", async function (next) {
-//     // Update queue position based on your logic
-//     // ...
-
-//     next();
-//   });
-
-//   applicationQueueSchema.post("save", async function () {
-//     // Update application status or send notifications based on processing outcome
-//     // ...
-//   });
-
 export default model<ApplicationQueueDocument>(
   "ApplicationQueue",
   applicationQueueSchema

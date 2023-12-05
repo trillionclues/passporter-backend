@@ -41,3 +41,20 @@
 //     return null;
 //   }
 // };
+
+// Example logic when processing applications
+// const processApplication = async () => {
+//     const applicationQueue = await ApplicationQueue.findOne();
+//     const applicationId = await applicationQueue.dequeueApplication();
+
+//     // Update the application status to "Processing"
+//     await Application.findByIdAndUpdate(applicationId, {
+//       $set: { queueStatus: "Processing" },
+//     });
+
+//     // ... (additional processing logic)
+//   };
+
+// Enqueue the application ID
+// const applicationQueue = await ApplicationQueue.findOne();
+// await applicationQueue.enqueueApplication(newApplication._id);
