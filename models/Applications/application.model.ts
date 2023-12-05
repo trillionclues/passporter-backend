@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { ApplicationDocument } from "../../types/application.document";
 
 const applicationSchema = new Schema(
@@ -12,12 +12,6 @@ const applicationSchema = new Schema(
       type: String,
       enum: ["Pending", "Processing", "Approved", "Rejected"],
       default: "Pending",
-    },
-    applicationType: {
-      type: String,
-      enum: ["None", "Passport", "Visa"],
-      default: "None",
-      unique: true,
     },
     passportNumber: {
       type: String,
@@ -35,24 +29,21 @@ const applicationSchema = new Schema(
     notes: {
       type: String,
     },
+    applicationType: {
+      type: String,
+      enum: ["None", "Passport", "Visa"],
+      default: "None",
+    },
   },
   {
     timestamps: true,
   }
 );
 
+// this will create an index on applicantId and applicationType
+applicationSchema.index(
+  { applicantId: 1, applicationType: 1 },
+  { unique: true }
+);
+
 export default model<ApplicationDocument>("Application", applicationSchema);
-
-// //  MIGHT NEED A HOOK FORN THIS
-// applicationSchema.pre("save", async function (next) {
-//   const existingApplication = await Application.findOne({
-//     applicant: this.applicantId,
-//     applicationType: this.applicationType,
-//   });
-
-//   if (existingApplication) {
-//     throw new Error("You already have an application of this type!");
-//   }
-
-//   next();
-// });

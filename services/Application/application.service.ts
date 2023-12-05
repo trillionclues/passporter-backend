@@ -3,8 +3,13 @@ import ApplicationQueue from "../../models/Application Queue/applicationqueue.mo
 import Application from "../../models/Applications/application.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 
-const createNewApplication = async (applicationData: any, applicantId: any) => {
+const createNewApplication = async (
+  applicationData: any,
+  applicantId: string
+) => {
   validateMongoDBId(applicantId);
+  console.log(applicationData);
+  console.log(applicantId);
 
   // Start a MongoDB transaction
   const session = await Application.startSession();
@@ -24,21 +29,10 @@ const createNewApplication = async (applicationData: any, applicantId: any) => {
 
     // create new application
     const newApplication = await Application.create({
-      applicant: applicantId,
+      applicantId: applicantId,
       ...applicationData,
       queuePosition: newQueuePosition,
     });
-
-    // Enqueue the new application ID
-    await ApplicationQueue.findOneAndUpdate(
-      { applicantId: applicantId },
-      {
-        $push: {
-          applicationIds: newApplication?._id,
-        },
-      },
-      { upsert: true }
-    );
 
     // Update applicant with new application
     await Applicant.findByIdAndUpdate(
@@ -56,40 +50,24 @@ const createNewApplication = async (applicationData: any, applicantId: any) => {
     // Commit the transaction
     await session.commitTransaction();
     return newApplication;
-  } catch (error) {
+  } catch (error: any) {
     // Rollback the transaction
     await session.abortTransaction();
-    throw error;
+    throw new Error(error);
   } finally {
     session.endSession();
   }
 };
 
-// const processApplication = async (applicantId: any) => {
-//   // Dequeue the application ID
-//   const queue = await ApplicationQueue.findOneAndUpdate(
-//     { applicantId: applicantId },
-//     { $pop: { applicationIds: -1 } }
-//   );
-
-//   if (queue) {
-//     const applicationId = queue.applicationIds[0];
-
-//     // Process the application with the retrieved applicationId
-//     // ...
-
-//     // Optionally, update the application status or perform other actions
-//     await Application.findByIdAndUpdate(
-//       applicationId,
-//       { reviewStatus: "Processed" },
-//       { new: true }
-//     );
-
-//     return applicationId;
-//   } else {
-//     // No application in the queue
-//     return null;
-//   }
-// };
-
 export { createNewApplication };
+
+// Enqueue the new application ID
+// await ApplicationQueue.findOneAndUpdate(
+//   { applicantId: applicantId },
+//   {
+//     $push: {
+//       applicationIds: newApplication?._id,
+//     },
+//   },
+//   { upsert: true }
+// );

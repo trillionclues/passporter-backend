@@ -4,11 +4,6 @@ import Application from "../Applications/application.model";
 
 const applicationQueueSchema = new Schema(
   {
-    applicantId: {
-      type: Schema.Types.ObjectId,
-      ref: "Applicant",
-      required: true,
-    },
     applicationIds: [
       {
         type: Schema.Types.ObjectId,

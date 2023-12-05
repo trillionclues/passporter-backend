@@ -7,33 +7,25 @@ const createApplicationHandler = asyncHandler(
   async (req: CustomRequest, res) => {
     const applicantId = req.applicant?._id?.toString();
 
-    // ****** BUG *******
-    // uniqueness constraint on applicationType is causing the error even though the applications were created by different users
-    // But i need the unique property so the applicant can only create one type of eother passport or visa application
-    // ****** BUG *******
-
     if (!applicantId) {
       throw new Error("Invalid applicantId");
     }
 
-    const applicationData = req.body;
-
     try {
-      // Check if applicant already has an application of the same type
-      const existingApplication = await Application.findOne({
-        applicantId: applicantId,
-        applicationType: applicationData.applicationType.toLowerCase(),
+      const applicationData = req.body;
+      const mergedApplicationData = { ...applicationData, applicantId };
+
+      const applicantExists = await Application.exists({
+        applicantId: mergedApplicationData.applicantId,
       });
 
-      if (existingApplication) {
-        throw new Error("You already have an application of this type!");
-      }
+      const typeExists = await Application.exists({
+        applicationType: mergedApplicationData.applicationType.toLowerCase(),
+      });
 
-      // Merge applicantId into applicationData
-      const mergedApplicationData = {
-        ...applicationData,
-        applicantId,
-      };
+      if (applicantExists && typeExists) {
+        throw new Error("An aplication of this type already exists!");
+      }
 
       //  create new application
       const newApplication = await createNewApplication(
@@ -41,20 +33,9 @@ const createApplicationHandler = asyncHandler(
         applicantId
       );
 
-      res.json(newApplication);
+      res.status(201).send(newApplication);
     } catch (error: any) {
-      // handle mongodb duplicate error
-      if (
-        error.name === "MongoServerError" &&
-        error.code === 11000 &&
-        error.keyPattern.applicationType
-      ) {
-        res
-          .status(400)
-          .send({ message: "You already have an application of this type!" });
-      } else {
-        throw new Error(error);
-      }
+      throw new Error("Error creating application: " + error.message);
     }
   }
 );

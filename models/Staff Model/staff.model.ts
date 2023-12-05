@@ -14,3 +14,30 @@
 // Permissions: A list of permissions for the staff member, such as approving passport applications, reviewing visa applications, etc.
 
 // Additionally, you'll need to implement logic to manage the passport application queue and staff review process. This may involve creating separate endpoints for submitting passport applications, viewing the queue, and reviewing applications.
+
+// const processApplication = async (applicantId: any) => {
+//   // Dequeue the application ID
+//   const queue = await ApplicationQueue.findOneAndUpdate(
+//     { applicantId: applicantId },
+//     { $pop: { applicationIds: -1 } }
+//   );
+
+//   if (queue) {
+//     const applicationId = queue.applicationIds[0];
+
+//     // Process the application with the retrieved applicationId
+//     // ...
+
+//     // Optionally, update the application status or perform other actions
+//     await Application.findByIdAndUpdate(
+//       applicationId,
+//       { reviewStatus: "Processed" },
+//       { new: true }
+//     );
+
+//     return applicationId;
+//   } else {
+//     // No application in the queue
+//     return null;
+//   }
+// };
