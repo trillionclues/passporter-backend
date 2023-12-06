@@ -35,7 +35,7 @@ const applicationSchema = new Schema(
     bookletType: {
       type: String,
       enum: ["32 Pages", "64 Pages"],
-      default: 32,
+      default: "32 Pages",
     },
     applicationType: {
       type: String,

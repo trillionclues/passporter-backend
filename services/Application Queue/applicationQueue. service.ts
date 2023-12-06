@@ -63,6 +63,33 @@ const dequeueApplication = async (applicationId: any) => {
   }
 };
 
+const dequeueAllApplications = async () => {
+  try {
+    // find application queue
+    const applicationQueue = await ApplicationQueue.findOne();
+    if (!applicationQueue) {
+      throw new Error("No application queue found!");
+    }
+
+    // clear the application queue
+    await ApplicationQueue.updateOne(
+      {},
+      {
+        $set: {
+          applicationIds: [],
+        },
+      }
+    );
+
+    return {
+      success: true,
+      message: "All applications successfully dequeued!",
+    };
+  } catch (error) {
+    throw new Error(`Error dequeuing all applications: ${error}`);
+  }
+};
+
 const updateApplicationStatus = async (
   applicationId: string,
   status: string
@@ -73,4 +100,4 @@ const updateQueuePosition = async (
   newQueuePosition: number
 ) => {};
 
-export { enqueueApplication, dequeueApplication };
+export { enqueueApplication, dequeueApplication, dequeueAllApplications };

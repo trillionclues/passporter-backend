@@ -1,5 +1,8 @@
 import asyncHandler from "express-async-handler";
-import { dequeueApplication } from "../services/Application Queue/applicationQueue. service";
+import {
+  dequeueAllApplications,
+  dequeueApplication,
+} from "../services/Application Queue/applicationQueue. service";
 import Application from "../models/Applications/application.model";
 
 const handleDequeueApplication = asyncHandler(async (req, res) => {
@@ -20,4 +23,13 @@ const handleDequeueApplication = asyncHandler(async (req, res) => {
   }
 });
 
-export { handleDequeueApplication };
+const handleDequeueAllApplications = asyncHandler(async (req, res) => {
+  try {
+    const result = await dequeueAllApplications();
+    res.json(result);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+export { handleDequeueApplication, handleDequeueAllApplications };
