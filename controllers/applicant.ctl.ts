@@ -9,8 +9,10 @@ import {
   logoutApplicant,
   sendPasswordResetToken,
   passwordResetLinkWithToken,
+  cancelApplication,
 } from "../services/Applicant/applicant.service";
 import { CustomRequest } from "../types/CustomRequest";
+import Application from "../models/Applications/application.model";
 
 const createApplicant = asyncHandler(async (req, res) => {
   try {
@@ -40,17 +42,6 @@ const handleGetOneApplicant = asyncHandler(async (req, res) => {
     throw new Error(error as string);
   }
 });
-
-// const handleDeleteApplicant = asyncHandler(async (req, res) => {
-//   const applicantId = req.params;
-
-//   try {
-//     const deleted = await deleteApplicant(applicantId);
-//     res.json({ deleted });
-//   } catch (error) {
-//     throw new Error(error as string);
-//   }
-// });
 
 // Applicant Controller Auth
 const handleApplicantLogin = asyncHandler(async (req, res) => {
@@ -138,6 +129,30 @@ const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
   }
 });
 
+const handleCancelApplication = asyncHandler(
+  async (req: CustomRequest, res) => {
+    const applicant = req.applicant?._id?.toString();
+
+    try {
+      // find applicationId with applicant
+      const application = await Application.findOne({
+        applicantId: applicant,
+        $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
+      });
+
+      if (!application) {
+        throw new Error("No application found for the applicant");
+      }
+
+      const result = await cancelApplication(application._id);
+
+      res.json(result);
+    } catch (error) {
+      throw new Error(error as string);
+    }
+  }
+);
+
 // const hnupdateProfilePicture = asyncHandler(async (req: CustomRequest, res) => {
 
 // })
@@ -154,4 +169,5 @@ export {
   handleApplicantLogout,
   handleSendPasswordResetToken,
   handleResetLinkWithToken,
+  handleCancelApplication,
 };

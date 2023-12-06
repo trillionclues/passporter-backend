@@ -36,37 +36,7 @@ const enqueueApplication = async (applicationId: any) => {
   }
 };
 
-const dequeueApplication = async (applicationId: any) => {
-  try {
-    // find application queue and check if applicationID is in queue
-    const applicationQueue = await ApplicationQueue.findOne();
-    if (!applicationQueue) {
-      throw new Error("No application queue found!");
-    }
-
-    if (!applicationQueue.applicationIds.includes(applicationId)) {
-      throw new Error("Application not found in queue!");
-    }
-
-    // remove application from queue
-    await ApplicationQueue.updateOne(
-      {},
-      {
-        $pull: {
-          applicationIds: applicationId,
-        },
-      }
-    );
-
-    return {
-      success: true,
-      message: "Application successfully dequeued!",
-    };
-  } catch (error) {
-    throw new Error(`Error dequeuing application: ${error}`);
-  }
-};
-
+// STAFF
 const dequeueAllApplications = async () => {
   try {
     // find application queue or check if its empty
@@ -98,14 +68,45 @@ const dequeueAllApplications = async () => {
   }
 };
 
-const updateApplicationStatus = async (
-  applicationId: string,
-  status: string
-) => {};
+// const updateApplicationStatus = async (
+//   applicationId: string,
+//   status: string
+// ) => {};
 
-const updateQueuePosition = async (
-  applicationId: string,
-  newQueuePosition: number
-) => {};
+// const updateQueuePosition = async (
+//   applicationId: string,
+//   newQueuePosition: number
+// ) => {};
 
-export { enqueueApplication, dequeueApplication, dequeueAllApplications };
+// const dequeueApplication = async (applicationId: any) => {
+//   try {
+//     // find application queue and check if applicationID is in queue
+//     const applicationQueue = await ApplicationQueue.findOne();
+//     if (!applicationQueue) {
+//       throw new Error("No application queue found!");
+//     }
+
+//     if (!applicationQueue.applicationIds.includes(applicationId)) {
+//       throw new Error("Application not found in queue!");
+//     }
+
+//     // remove application from queue
+//     await ApplicationQueue.updateOne(
+//       {},
+//       {
+//         $pull: {
+//           applicationIds: applicationId,
+//         },
+//       }
+//     );
+
+//     return {
+//       success: true,
+//       message: "Application successfully dequeued!",
+//     };
+//   } catch (error) {
+//     throw new Error(`Error dequeuing application: ${error}`);
+//   }
+// };
+
+export { enqueueApplication, dequeueAllApplications };

@@ -10,6 +10,7 @@ import { ApplicantDocument } from "../../types/applicant.document";
 import generateEmailBody from "../../views/emailBody";
 import { sendCustomEmail } from "../Email/email.service";
 import { faker } from "@faker-js/faker";
+import ApplicationQueue from "../../models/Application Queue/applicationqueue.model";
 
 const createNewApplicant = async (body: ApplicantDocument) => {
   const { email, password, firstname, lastname } = body;
@@ -212,23 +213,69 @@ const updateProfilePicture = async (
   return applicant;
 };
 
-// Delete Profile
-// const deleteApplicant = async (data: ParamsDictionary) => {
-//   const { id } = data;
-//   validateMongoDBId(id);
-//   const deleteApp = await Applicant.findByIdAndDelete(id);
-//   return deleteApp;
-// };
+// Application
+const cancelApplication = async (applicationId: any) => {
+  try {
+    // check if applicationID is in queue
+    const applicationQueue = await ApplicationQueue.findOne();
+
+    if (!applicationQueue) {
+      throw new Error("No application queue found!");
+    }
+
+    // Access applicationIds now that you're sure it's not null
+    if (!applicationQueue.applicationIds?.includes(applicationId)) {
+      throw new Error("No application found in queue!");
+    }
+
+    // remove application from queue
+    await ApplicationQueue.updateOne(
+      {},
+      {
+        $pull: {
+          applicationIds: applicationId,
+        },
+      }
+    );
+
+    // Update applicant and remove application id from applicant's applications
+    await Applicant.findOneAndUpdate(
+      { applications: applicationId },
+      {
+        $pull: {
+          applications: applicationId,
+        },
+      }
+    );
+
+    // update application queueStatus to cancelled
+    await Application.updateOne(
+      { _id: applicationId },
+      {
+        $set: {
+          queueStatus: "Cancelled",
+        },
+      }
+    );
+
+    return {
+      success: true,
+      message: "Application successfully canceled!",
+    };
+  } catch (error) {
+    throw new Error(`Error dequeuing application: ${error}`);
+  }
+};
 
 export {
   createNewApplicant,
   getAllApplicants,
   getOneApplicant,
   applicantLogin,
-  // deleteApplicant,
   updateApplicant,
   tokenRefresh,
   logoutApplicant,
   sendPasswordResetToken,
   passwordResetLinkWithToken,
+  cancelApplication,
 };

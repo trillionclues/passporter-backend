@@ -1,14 +1,10 @@
 import express from "express";
-import {
-  handleDequeueAllApplications,
-  handleDequeueApplication,
-} from "../controllers/queue.ctl";
+import { handleDequeueAllApplications } from "../controllers/queue.ctl";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-// ApplicationQueue
-router.post("/dequeue-application", authMiddleware, handleDequeueApplication);
+// ApplicationQueue STAFF middleware
 router.post("/dequeue-all-applications", handleDequeueAllApplications);
 
 export default router;

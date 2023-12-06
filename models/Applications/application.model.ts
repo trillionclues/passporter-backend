@@ -10,7 +10,7 @@ const applicationSchema = new Schema(
     },
     queueStatus: {
       type: String,
-      enum: ["Pending", "Processing", "Approved", "Rejected"],
+      enum: ["Pending", "Processing", "Approved", "Rejected", "Cancelled"],
       default: "Pending",
     },
     passportNumber: {
