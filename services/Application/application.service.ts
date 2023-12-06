@@ -36,6 +36,20 @@ const createNewApplication = async (
     // Enqueue the newly created application and save
     await enqueueApplication(newApplication._id);
 
+    // Update applicant with new application
+    await Applicant.findByIdAndUpdate(
+      applicantId,
+      {
+        $push: {
+          applications: newApplication._id,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+
     // Commit the transaction
     await session.commitTransaction();
     return newApplication;
@@ -50,18 +64,3 @@ const createNewApplication = async (
 
 export { createNewApplication };
 
-// *** BUG ***** //
-// Error updated and saving applicationqueue records
-// await ApplicationQueue.findOneAndUpdate(
-//   {},
-//   {
-//     $push: {
-//       applicationIds: newApplication._id,
-//     },
-//   },
-//   {
-//     upsert: true,
-//   }
-// );
-
-//
