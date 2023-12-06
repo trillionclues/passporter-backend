@@ -4,24 +4,31 @@ import {
   dequeueApplication,
 } from "../services/Application Queue/applicationQueue. service";
 import Application from "../models/Applications/application.model";
+import { CustomRequest } from "../types/CustomRequest";
 
-const handleDequeueApplication = asyncHandler(async (req, res) => {
-  const applicationId = req.body.applicationId;
+const handleDequeueApplication = asyncHandler(
+  async (req: CustomRequest, res) => {
+    const applicant = req.applicant?._id?.toString();
 
-  try {
-    // check if the provided applicationId matches a valid application _id in the database
-    const applicationExists = await Application.exists({ _id: applicationId });
+    try {
+      // find applicationId with applicant
+      const application = await Application.findOne({
+        applicantId: applicant,
+        $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
+      });
 
-    if (!applicationExists) {
-      throw new Error(`Invalid application ID: ${applicationId}`);
+      if (!application) {
+        throw new Error("No application found for the applicant");
+      }
+
+      const result = await dequeueApplication(application._id);
+
+      res.json(result);
+    } catch (error) {
+      throw new Error(error as string);
     }
-
-    const result = await dequeueApplication(applicationId);
-    res.json(result);
-  } catch (error) {
-    throw new Error(error as string);
   }
-});
+);
 
 const handleDequeueAllApplications = asyncHandler(async (req, res) => {
   try {

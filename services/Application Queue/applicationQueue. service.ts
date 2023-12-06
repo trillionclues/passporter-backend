@@ -38,13 +38,17 @@ const enqueueApplication = async (applicationId: any) => {
 
 const dequeueApplication = async (applicationId: any) => {
   try {
-    // find application queue
+    // find application queue and check if applicationID is in queue
     const applicationQueue = await ApplicationQueue.findOne();
     if (!applicationQueue) {
       throw new Error("No application queue found!");
     }
 
-    // remove application from queue and the position
+    if (!applicationQueue.applicationIds.includes(applicationId)) {
+      throw new Error("Application not found in queue!");
+    }
+
+    // remove application from queue
     await ApplicationQueue.updateOne(
       {},
       {
@@ -65,10 +69,14 @@ const dequeueApplication = async (applicationId: any) => {
 
 const dequeueAllApplications = async () => {
   try {
-    // find application queue
+    // find application queue or check if its empty
     const applicationQueue = await ApplicationQueue.findOne();
-    if (!applicationQueue) {
-      throw new Error("No application queue found!");
+    if (!applicationQueue || applicationQueue.applicationIds.length === 0) {
+      // Application queue is empty
+      return {
+        success: false,
+        message: "Application queue is empty!",
+      };
     }
 
     // clear the application queue
