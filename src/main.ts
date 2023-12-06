@@ -2,11 +2,12 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { json, urlencoded } from "body-parser";
-import { errorHandler, notFound } from "../middlewares/errorHandler";
 import cookieParser from "cookie-parser";
-import authRoute from "../routes/auth.routes";
-import applicationRoute from "../routes/application.routes";
+import authRoute from "../routes/auth.route";
 import dbConnect from "../config/dbConnect";
+import { errorHandler, notFound } from "../middlewares/errorHandler";
+import applicantApplicationRoute from "../routes/applicantApplications.route";
+import applicationQueueRoute from "../routes/queue.route";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -27,7 +28,8 @@ app.get("/", (req, res) => {
 
 // routes
 app.use("/api/applicant", authRoute);
-app.use("/api/application", applicationRoute);
+app.use("/api/application", applicantApplicationRoute);
+app.use("/api/queue", applicationQueueRoute);
 
 // error middlwares
 app.use(notFound);

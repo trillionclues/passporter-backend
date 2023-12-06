@@ -212,15 +212,6 @@ const updateProfilePicture = async (
   return applicant;
 };
 
-// Manage Application
-// const submitApplication = async (applicantId: string, applicationData: any) => {
-//   // Create and link the application to the applicant
-//   const application = await Application.create({ applicantId, ...applicationData });
-//   const applicant = await Applicant.findByIdAndUpdate(applicantId, { $push: { applications: application._id } }, { new: true });
-
-//   return { applicant, application };
-// };
-
 // Delete Profile
 // const deleteApplicant = async (data: ParamsDictionary) => {
 //   const { id } = data;

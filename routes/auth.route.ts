@@ -5,7 +5,6 @@ import {
   handleGetAllApplicants,
   handleGetOneApplicant,
   handleApplicantLogin,
-  // handleDeleteApplicant,
   handleUpdateApplicant,
   handleTokenRefresh,
   handleApplicantLogout,

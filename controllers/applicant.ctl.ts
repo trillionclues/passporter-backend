@@ -2,7 +2,6 @@ import asyncHandler from "express-async-handler";
 import {
   applicantLogin,
   createNewApplicant,
-  // deleteApplicant,
   getOneApplicant,
   getAllApplicants,
   updateApplicant,
@@ -150,7 +149,6 @@ export {
   handleGetAllApplicants,
   handleGetOneApplicant,
   handleApplicantLogin,
-  // handleDeleteApplicant,
   handleUpdateApplicant,
   handleTokenRefresh,
   handleApplicantLogout,

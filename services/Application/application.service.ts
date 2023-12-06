@@ -1,5 +1,4 @@
 import Applicant from "../../models/ApplicantModel/applicant.model";
-import ApplicationQueue from "../../models/Application Queue/applicationqueue.model";
 import Application from "../../models/Applications/application.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { enqueueApplication } from "../Application Queue/applicationQueue. service";
@@ -49,7 +48,6 @@ const createNewApplication = async (
       }
     );
 
-
     // Commit the transaction
     await session.commitTransaction();
     return newApplication;
@@ -62,5 +60,20 @@ const createNewApplication = async (
   }
 };
 
-export { createNewApplication };
+// get all applicant applications either passport or visa
+const getApplicantApplications = async (applicantId: any) => {
+  validateMongoDBId(applicantId);
+  console.log(applicantId);
 
+  const applicant = await Applicant.findById(applicantId).populate(
+    "applications"
+  );
+
+  if (!applicant) {
+    throw new Error("Applicant not found");
+  }
+
+  return applicant.applications;
+};
+
+export { createNewApplication, getApplicantApplications };
