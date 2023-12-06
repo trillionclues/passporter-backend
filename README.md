@@ -70,18 +70,17 @@ Now, the backend server should be up and running.
 
 This project uses a number of open source projects:
 
-- [NodeJS] - A JavaScript runtime built on Chrome's V8 JavaScript engine.
+- [JSON Web Token] - Compact, URL-safe means of representing claims to be transferred between two parties.
+- [Multer] - Node.js middleware for handling multipart/form-data, used for uploading files.
+- [NodeJS] - JavaScript runtime built on Chrome's V8 JavaScript engine.
 - [Express] - Fast, unopinionated, minimalist web framework for Node.js.
-- [Yarn] - A package manager for the JavaScript platform.
-- [MongoDB] - A cross-platform document-oriented database program.
+- [MongoDB] - Cross-platform document-oriented database program.
+- [Crypto] - JavaScript library for encrypting and decrypting data.
+- [Yarn] - Package manager for the JavaScript platform.
 - [Mongoose] - Mongoose ODM for MongoDB object modelling.
 - [Bcrypt] - Secure password hashing for Node.js.
-- [JSON Web Token] - A compact, URL-safe means of representing claims to be transferred between two parties.
-- [nodemailer] - A simple Node.js module for sending email.
-- [dotenv] - Load environment variables from .env files.
+- [nodemailer] - Node.js module for sending email.
 - [cloudinary] - Cloudinary API wrapper for Node.js.
-- [Multer] - A Node.js middleware for handling multipart/form-data, used for uploading files.
-- [Crypto] - A JavaScript library for encrypting and decrypting data.
 
 ### [Usage](#usage)
 
@@ -126,6 +125,6 @@ Access the API endpoints as described in the [API Endpoints](#api-documentation)
 
 This project is licensed under the MIT License.
 
-Feel free to create an issue if yout think there is a bug or an error.
+Feel free to create an issue if yout think there is an error, a feature request or any other thing that can be improved on.
 
-##WAGMI
+##WAGMI &#x1F60A🥂
