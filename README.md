@@ -127,4 +127,4 @@ This project is licensed under the MIT License.
 
 Feel free to create an issue if yout think there is an error, a feature request or any other thing that can be improved on.
 
-##WAGMI &#x1F60A🥂
+##WAGMI 🥂
