@@ -15,16 +15,14 @@ const createApplicationHandler = asyncHandler(
       const applicationData = req.body;
       const mergedApplicationData = { ...applicationData, applicantId };
 
-      const applicantExists = await Application.exists({
-        applicantId: mergedApplicationData.applicantId,
+      // get the applicantID and his applications with application type of either Passport and Visa applicationType and compare if they exist in the database
+      const applicant = await Application.findOne({
+        applicantId: applicantId,
+        $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
       });
 
-      const typeExists = await Application.exists({
-        applicationType: mergedApplicationData.applicationType.toLowerCase(),
-      });
-
-      if (applicantExists && typeExists) {
-        throw new Error("An aplication of this type already exists!");
+      if (applicant) {
+        throw new Error("Applicant already has a passport or visa application");
       }
 
       //  create new application
