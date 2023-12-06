@@ -239,21 +239,22 @@ const cancelApplication = async (applicationId: any) => {
     );
 
     // Update applicant and remove application id from applicant's applications
-    await Applicant.findOneAndUpdate(
-      { applications: applicationId },
-      {
-        $pull: {
-          applications: applicationId,
-        },
-      }
-    );
+    // await Applicant.findOneAndUpdate(
+    //   { applications: applicationId },
+    //   {
+    //     $pull: {
+    //       applications: applicationId,
+    //     },
+    //   }
+    // );
 
-    // update application queueStatus to cancelled
+    // update application queueStatus to cancelled and applicatype to none
     await Application.updateOne(
       { _id: applicationId },
       {
         $set: {
           queueStatus: "Cancelled",
+          applicationType: "None",
         },
       }
     );

@@ -18,16 +18,34 @@ const createApplicationHandler = asyncHandler(
       const applicationData = req.body;
       const mergedApplicationData = { ...applicationData, applicantId };
 
-      // get the applicantID and his applications with application type of either Passport and Visa applicationType and compare if tthe applicant has more than one application running at a time...
-      const applicant = await Application.findOne({
+      // If previous application is pending or processing, cannot create a new application. If application is calcelled or rejected or no current applicaition, can create a new application.
+
+      const previousApplication = await Application.findOne({
         applicantId: applicantId,
         $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
       });
 
-      if (applicant) {
-        throw new Error("Applicant already has a passport or visa application");
+      if (
+        previousApplication &&
+        previousApplication.queueStatus === "Pending"
+      ) {
+        throw new Error("You already have a pending application");
+      } else if (
+        previousApplication &&
+        previousApplication.queueStatus === "Processing"
+      ) {
+        throw new Error("You already have a processing application");
+      } else if (
+        previousApplication &&
+        previousApplication.queueStatus !== "Cancelled"
+      ) {
+        throw new Error("You cannot create a new application");
+      } else if (
+        previousApplication &&
+        previousApplication.queueStatus !== "Cancelled"
+      ) {
+        throw new Error("You cannot create a new application");
       }
-
       //  create new application
       const newApplication = await createNewApplication(
         mergedApplicationData,
