@@ -26,13 +26,29 @@ const applicationSchema = new Schema(
     expirationDate: {
       type: Date,
     },
-    notes: {
+    processingState: {
       type: String,
+    },
+    processingOffice: {
+      type: String,
+    },
+    bookletType: {
+      type: String,
+      enum: ["32 Pages", "64 Pages"],
+      default: 32,
     },
     applicationType: {
       type: String,
       enum: ["None", "Passport", "Visa"],
       default: "None",
+    },
+    notes: {
+      type: String,
+    },
+    validity: {
+      type: String,
+      enum: ["5years", "10years", "15years"],
+      default: "5years",
     },
   },
   {

@@ -34,6 +34,9 @@ const applicantSchema = new Schema(
     gender: {
       type: String,
     },
+    NationIdentificationNumber: {
+      type: String,
+    },
     nationality: {
       type: String,
     },
