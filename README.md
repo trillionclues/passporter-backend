@@ -1,6 +1,6 @@
-# NIS - Passporter
+# NIS - Passporter API
 
-Welcome to Passporter. This is the documentation for the Passporter API, your one-stop-shop for all things Passport and Visa applications.
+Welcome to Passporter. This is the documentation for the Passporter API, your one-stop-shop for all things Passport and Visa applications in Nigeria. This API is designed to be used by both staff and applicants and uses a seamless "QUEUE" system.
 
 ## Table of Contents
 
