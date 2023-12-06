@@ -1,4 +1,5 @@
 import ApplicationQueue from "../../models/Application Queue/applicationqueue.model";
+import Application from "../../models/Applications/application.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 
 const enqueueApplication = async (applicationId: any) => {
@@ -35,7 +36,7 @@ const enqueueApplication = async (applicationId: any) => {
   }
 };
 
-const dequeueApplication = async (applicationId: string) => {
+const dequeueApplication = async (applicationId: any) => {
   try {
     // find application queue
     const applicationQueue = await ApplicationQueue.findOne();
@@ -73,28 +74,3 @@ const updateQueuePosition = async (
 ) => {};
 
 export { enqueueApplication, dequeueApplication };
-
-//  // find application id in applicationqueue
-//  const applicationIDExists = await ApplicationQueue.findOne({
-//   applicationIds: applicationId,
-// });
-
-// if (!applicationIDExists) {
-//   throw new Error("Application not in queue!");
-// }
-
-// const applicationId = applicationQueue.applicationIds.shift();
-
-// if (!applicationId) {
-//   throw new Error("No application in queue!");
-// }
-
-// await ApplicationQueue.updateOne(
-//   {},
-//   { $pull: { applicationIds: applicationId } }
-// );
-
-// return {
-//   success: true,
-//   applicationId: applicationId,
-// };
