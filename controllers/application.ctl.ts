@@ -18,6 +18,7 @@ const createApplicationHandler = asyncHandler(
       const applicationData = req.body;
       const mergedApplicationData = { ...applicationData, applicantId };
 
+      //  **** STILL TESTING ****//
       // If previous application is pending or processing, cannot create a new application. If application is calcelled or rejected or no current applicaition, can create a new application.
 
       const previousApplication = await Application.findOne({
@@ -46,6 +47,8 @@ const createApplicationHandler = asyncHandler(
       ) {
         throw new Error("You cannot create a new application");
       }
+      // **** STILL TESTING ****//
+
       //  create new application
       const newApplication = await createNewApplication(
         mergedApplicationData,

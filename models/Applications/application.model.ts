@@ -28,19 +28,22 @@ const applicationSchema = new Schema(
     },
     processingState: {
       type: String,
+      required: true,
     },
     processingOffice: {
       type: String,
+      required: true,
     },
     bookletType: {
       type: String,
       enum: ["32 Pages", "64 Pages"],
       default: "32 Pages",
+      required: true,
     },
     applicationType: {
       type: String,
       enum: ["None", "Passport", "Visa"],
-      default: "None",
+      required: true,
     },
     notes: {
       type: String,
@@ -48,7 +51,7 @@ const applicationSchema = new Schema(
     validity: {
       type: String,
       enum: ["5years", "10years", "15years"],
-      default: "5years",
+      required: true,
     },
   },
   {

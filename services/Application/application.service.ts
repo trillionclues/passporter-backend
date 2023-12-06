@@ -1,10 +1,11 @@
 import Applicant from "../../models/ApplicantModel/applicant.model";
 import Application from "../../models/Applications/application.model";
+import { ApplicationDocument } from "../../types/application.document";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { enqueueApplication } from "../Application Queue/applicationQueue. service";
 
 const createNewApplication = async (
-  applicationData: any,
+  applicationData: ApplicationDocument,
   applicantId: string
 ) => {
   validateMongoDBId(applicantId);
