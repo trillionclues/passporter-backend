@@ -60,9 +60,13 @@ const applicationSchema = new Schema(
 );
 
 // this will create an index on applicantId and applicationType
+// applicationSchema.index(
+//   { applicantId: 1, applicationType: 1 },
+//   { unique: true }
+// );
 applicationSchema.index(
   { applicantId: 1, applicationType: 1 },
-  { unique: true }
+  { unique: false }
 );
 
 export default model<ApplicationDocument>("Application", applicationSchema);

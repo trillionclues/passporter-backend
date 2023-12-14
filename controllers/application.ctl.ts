@@ -21,32 +21,32 @@ const createApplicationHandler = asyncHandler(
       //  **** STILL TESTING ****//
       // If previous application is pending or processing, cannot create a new application. If application is calcelled or rejected or no current applicaition, can create a new application.
 
-      const previousApplication = await Application.findOne({
-        applicantId: applicantId,
-        $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
-      });
+      // const previousApplication = await Application.findOne({
+      //   applicantId: applicantId,
+      //   $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
+      // });
 
-      if (
-        previousApplication &&
-        previousApplication.queueStatus === "Pending"
-      ) {
-        throw new Error("You already have a pending application");
-      } else if (
-        previousApplication &&
-        previousApplication.queueStatus === "Processing"
-      ) {
-        throw new Error("You already have a processing application");
-      } else if (
-        previousApplication &&
-        previousApplication.queueStatus !== "Cancelled"
-      ) {
-        throw new Error("You cannot create a new application");
-      } else if (
-        previousApplication &&
-        previousApplication.queueStatus !== "Cancelled"
-      ) {
-        throw new Error("You cannot create a new application");
-      }
+      // if (
+      //   previousApplication &&
+      //   previousApplication.queueStatus === "Pending"
+      // ) {
+      //   throw new Error("You already have a pending application");
+      // } else if (
+      //   previousApplication &&
+      //   previousApplication.queueStatus === "Processing"
+      // ) {
+      //   throw new Error("You already have a processing application");
+      // } else if (
+      //   previousApplication &&
+      //   previousApplication.queueStatus !== "Cancelled"
+      // ) {
+      //   throw new Error("You cannot create a new application");
+      // } else if (
+      //   previousApplication &&
+      //   previousApplication.queueStatus !== "Cancelled"
+      // ) {
+      //   throw new Error("You cannot create a new application");
+      // }
       // **** STILL TESTING ****//
 
       //  create new application
