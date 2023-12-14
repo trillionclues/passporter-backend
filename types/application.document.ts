@@ -2,6 +2,7 @@ import { Document, Schema } from "mongoose";
 
 export interface ApplicationDocument extends Document {
   applicantId?: Schema.Types.ObjectId;
+  processedBy?: Schema.Types.ObjectId;
   reviewStatus: "Pending" | "Processing" | "Approved" | "Rejected";
   applicationType: "None" | "Passport" | "Visa";
   passportNumber?: string;
@@ -17,8 +18,12 @@ export interface ApplicationDocument extends Document {
     | "Approved"
     | "Rejected"
     | "Cancelled";
+  queueStatusHistory?: {
+    status: "Pending" | "Processing" | "Approved" | "Rejected" | "Cancelled";
+    timestamp: Date;
+  };
   expirationDate?: Date;
-  notes?: string;
+  comments?: string;
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;

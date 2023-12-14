@@ -8,11 +8,24 @@ const applicationSchema = new Schema(
       ref: "Applicant",
       required: true,
     },
+    processedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "Admin",
+    },
     queueStatus: {
       type: String,
       enum: ["Pending", "Processing", "Approved", "Rejected", "Cancelled"],
       default: "Pending",
     },
+    queueStatusHistory: [
+      {
+        status: String,
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
     passportNumber: {
       type: String,
     },
@@ -45,9 +58,12 @@ const applicationSchema = new Schema(
       enum: ["None", "Passport", "Visa"],
       required: true,
     },
-    notes: {
-      type: String,
-    },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
     validity: {
       type: String,
       enum: ["5years", "10years", "15years"],
@@ -60,10 +76,6 @@ const applicationSchema = new Schema(
 );
 
 // this will create an index on applicantId and applicationType
-// applicationSchema.index(
-//   { applicantId: 1, applicationType: 1 },
-//   { unique: true }
-// );
 applicationSchema.index(
   { applicantId: 1, applicationType: 1 },
   { unique: false }

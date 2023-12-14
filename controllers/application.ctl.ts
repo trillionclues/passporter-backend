@@ -4,7 +4,6 @@ import {
   createNewApplication,
   getApplicantApplications,
 } from "../services/Application/application.service";
-import Application from "../models/Applications/application.model";
 
 const createApplicationHandler = asyncHandler(
   async (req: CustomRequest, res) => {
@@ -17,38 +16,6 @@ const createApplicationHandler = asyncHandler(
     try {
       const applicationData = req.body;
       const mergedApplicationData = { ...applicationData, applicantId };
-
-      //  **** STILL TESTING ****//
-      // If previous application is pending or processing, cannot create a new application. If application is calcelled or rejected or no current applicaition, can create a new application.
-
-      // const previousApplication = await Application.findOne({
-      //   applicantId: applicantId,
-      //   $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
-      // });
-
-      // if (
-      //   previousApplication &&
-      //   previousApplication.queueStatus === "Pending"
-      // ) {
-      //   throw new Error("You already have a pending application");
-      // } else if (
-      //   previousApplication &&
-      //   previousApplication.queueStatus === "Processing"
-      // ) {
-      //   throw new Error("You already have a processing application");
-      // } else if (
-      //   previousApplication &&
-      //   previousApplication.queueStatus !== "Cancelled"
-      // ) {
-      //   throw new Error("You cannot create a new application");
-      // } else if (
-      //   previousApplication &&
-      //   previousApplication.queueStatus !== "Cancelled"
-      // ) {
-      //   throw new Error("You cannot create a new application");
-      // }
-      // **** STILL TESTING ****//
-
       //  create new application
       const newApplication = await createNewApplication(
         mergedApplicationData,
@@ -77,3 +44,34 @@ const handleGetApplicantAplications = asyncHandler(
 );
 
 export { createApplicationHandler, handleGetApplicantAplications };
+
+//  **** STILL TESTING ****//
+// If previous application is pending or processing, cannot create a new application. If application is calcelled or rejected or no current applicaition, can create a new application.
+
+// const previousApplication = await Application.findOne({
+//   applicantId: applicantId,
+//   $or: [{ applicationType: "Passport" }, { applicationType: "Visa" }],
+// });
+
+// if (
+//   previousApplication &&
+//   previousApplication.queueStatus === "Pending"
+// ) {
+//   throw new Error("You already have a pending application");
+// } else if (
+//   previousApplication &&
+//   previousApplication.queueStatus === "Processing"
+// ) {
+//   throw new Error("You already have a processing application");
+// } else if (
+//   previousApplication &&
+//   previousApplication.queueStatus !== "Cancelled"
+// ) {
+//   throw new Error("You cannot create a new application");
+// } else if (
+//   previousApplication &&
+//   previousApplication.queueStatus !== "Cancelled"
+// ) {
+//   throw new Error("You cannot create a new application");
+// }
+// **** STILL TESTING ****//

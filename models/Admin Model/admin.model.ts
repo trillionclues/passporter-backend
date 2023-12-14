@@ -1,3 +1,46 @@
+import { Schema, model } from "mongoose";
+import { AdminDocument } from "../../types/admin.document";
+
+const adminSchema = new Schema(
+  {
+    firstname: {
+      type: String,
+      required: true,
+    },
+    lastname: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    role: {
+      type: String,
+      default: "admin",
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    profilePicture: {
+      type: String,
+      default: "",
+    },
+    refreshToken: {
+      type: String,
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default model<AdminDocument>("Admin", adminSchema);
 //   // When querying applications and populating the applicant field
 //   const applications = await ApplicationModel.find().populate('applicant');
 
