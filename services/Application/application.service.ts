@@ -1,8 +1,10 @@
+import { AnyNsRecord } from "dns";
 import Applicant from "../../models/ApplicantModel/applicant.model";
 import Application from "../../models/Applications/application.model";
 import { ApplicationDocument } from "../../types/application.document";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
 import { enqueueApplication } from "../Application Queue/applicationQueue. service";
+import { ParamsDictionary } from "express-serve-static-core";
 
 const createNewApplication = async (
   applicationData: ApplicationDocument,
@@ -64,7 +66,7 @@ const createNewApplication = async (
 // get all applicant applications either passport or visa
 const getApplicantApplications = async (applicantId: any) => {
   validateMongoDBId(applicantId);
-  console.log(applicantId);
+  // console.log(applicantId);
 
   const applicant = await Applicant.findById(applicantId).populate(
     "applications"
@@ -77,4 +79,17 @@ const getApplicantApplications = async (applicantId: any) => {
   return applicant.applications;
 };
 
-export { createNewApplication, getApplicantApplications };
+const getSingleApplication = async (data: any) => {
+  const { id } = data;
+  validateMongoDBId(id);
+
+  const application = await Application.findById(id);
+
+  if (!application) {
+    throw new Error("Application not found");
+  }
+
+  return application;
+};
+
+export { createNewApplication, getApplicantApplications, getSingleApplication };

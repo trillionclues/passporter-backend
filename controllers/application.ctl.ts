@@ -3,6 +3,7 @@ import { CustomRequest } from "../types/CustomRequest";
 import {
   createNewApplication,
   getApplicantApplications,
+  getSingleApplication,
 } from "../services/Application/application.service";
 
 const createApplicationHandler = asyncHandler(
@@ -43,7 +44,22 @@ const handleGetApplicantAplications = asyncHandler(
   }
 );
 
-export { createApplicationHandler, handleGetApplicantAplications };
+const handleGetSingleApplication = asyncHandler(async (req, res) => {
+  const applicationId = req.params;
+
+  try {
+    const application = await getSingleApplication(applicationId);
+    res.status(200).json(application);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
+export {
+  createApplicationHandler,
+  handleGetApplicantAplications,
+  handleGetSingleApplication,
+};
 
 //  **** STILL TESTING ****//
 // If previous application is pending or processing, cannot create a new application. If application is calcelled or rejected or no current applicaition, can create a new application.
