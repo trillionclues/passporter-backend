@@ -18,6 +18,7 @@ const adminSchema = new Schema(
     },
     role: {
       type: String,
+      enum: ["passport_officer", "visa_officer", "admin"],
       default: "admin",
     },
     password: {
@@ -31,6 +32,10 @@ const adminSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    assignedApplicants: {
+      type: [Schema.Types.ObjectId],
+      ref: "Applicant",
+    },
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -41,18 +46,6 @@ const adminSchema = new Schema(
 );
 
 export default model<AdminDocument>("Admin", adminSchema);
-//   // When querying applications and populating the applicant field
-//   const applications = await ApplicationModel.find().populate('applicant');
-
-// Create a new model for staff members with the following fields:
-
-// Staff ID: A unique identifier for the staff member.
-
-// First Name: The staff member's first name.
-
-// Last Name: The staff member's last name.
-
-// Role: The staff member's role (passport officer, visa officer, etc.).
 
 // Permissions: A list of permissions for the staff member, such as approving passport applications, reviewing visa applications, etc.
 

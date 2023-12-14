@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, Schema } from "mongoose";
 
 export interface AdminDocument extends Document {
   firstname: string;
@@ -12,6 +12,8 @@ export interface AdminDocument extends Document {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   refreshToken?: string;
+  role?: "passport_officer" | "visa_officer" | "admin";
+  assignedApplicants?: Schema.Types.ObjectId[];
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;
