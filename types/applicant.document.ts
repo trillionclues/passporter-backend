@@ -15,6 +15,7 @@ export interface ApplicantDocument extends Document {
   applications: Schema.Types.ObjectId[];
   queueStatus: "InQueue" | "Reviewed";
   refreshToken?: string;
+  role: string;
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;

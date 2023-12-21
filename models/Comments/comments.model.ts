@@ -7,9 +7,14 @@ const commentSchema = new Schema(
       type: String,
       required: true,
     },
-    adminId: {
+    userId: {
       type: Schema.Types.ObjectId,
-      ref: "Admin",
+      required: true,
+    },
+    userType: {
+      type: String,
+      enum: ["admin", "applicant"],
+      required: true,
     },
     applicationId: {
       type: Schema.Types.ObjectId,

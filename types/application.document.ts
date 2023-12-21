@@ -1,4 +1,4 @@
-import { Document, Schema } from "mongoose";
+import { Document, Schema, Types } from "mongoose";
 
 export interface ApplicationDocument extends Document {
   applicantId?: Schema.Types.ObjectId;
@@ -23,7 +23,7 @@ export interface ApplicationDocument extends Document {
     timestamp: Date;
   };
   expirationDate?: Date;
-  comments?: string;
+  comments?: Types.ObjectId[];
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;
