@@ -1,6 +1,7 @@
 export interface CommentDocument extends Document {
   text: string;
-  adminId: string;
+  userId: string;
+  userType: string;
   applicationId: string;
   createdAt: Date;
 }

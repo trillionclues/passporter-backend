@@ -1,7 +1,8 @@
 import Comment from "../../models/Comments/comments.model";
-import Application from "../../models/ApplicantModel/applicant.model";
+import Application from "../../models/Applications/application.model";
 import Applicant from "../../models/ApplicantModel/applicant.model";
 import Admin from "../../models/Admin Model/admin.model";
+import { validateMongoDBId } from "../../utils/validateMongoDBId";
 
 const createApplicantComment = async (
   text: string,
@@ -9,6 +10,8 @@ const createApplicantComment = async (
   userRole: any,
   applicationId: string
 ) => {
+  validateMongoDBId(applicantId);
+
   try {
     const applicant = await Applicant.findById(applicantId);
     if (!applicant) {
@@ -24,8 +27,8 @@ const createApplicantComment = async (
     // Create the comment
     const comment = new Comment({
       text,
-      applicantId,
-      userRole,
+      userId: applicantId,
+      userType: userRole,
       applicationId,
     });
 
@@ -44,4 +47,33 @@ const createApplicantComment = async (
   }
 };
 
-export { createApplicantComment };
+const getAllCommentsForApplication = async (applicationId: string) => {
+  try {
+    const comments = await Comment.find({ applicationId }).exec();
+
+    // Extract commenter information for each comment
+    const commenterDetails = await Promise.all(
+      comments.map(async (comment) => {
+        let commenterName = "Unknown";
+        if (comment.userType === "applicant") {
+          const applicant = await Applicant.findById(comment.userId);
+          if (applicant) {
+            commenterName = `${applicant.firstname} ${applicant.lastname}`;
+          }
+        } else if (comment.userType === "admin") {
+          const admin = await Admin.findById(comment.userId);
+          if (admin) {
+            commenterName = `${admin.firstname} ${admin.lastname}`;
+          }
+        }
+        return { commenterName, commentText: comment.text };
+      })
+    );
+
+    return commenterDetails;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export { createApplicantComment, getAllCommentsForApplication };

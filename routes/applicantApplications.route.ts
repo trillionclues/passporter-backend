@@ -7,6 +7,10 @@ import {
   handleGetSingleApplication,
 } from "../controllers/application.ctl";
 import { handleCancelApplication } from "../controllers/applicant.ctl";
+import {
+  createCommentHandler,
+  getAllCommentsForApplicationHandler,
+} from "../controllers/comment.ctl";
 
 const router = express.Router();
 
@@ -14,6 +18,10 @@ const router = express.Router();
 router.post("/create-application", authMiddleware, createApplicationHandler);
 router.get("/", authMiddleware, handleGetApplicantAplications);
 router.post("/cancel-application", authMiddleware, handleCancelApplication);
+
+// comments
+router.post("/add-applicant-comment", authMiddleware, createCommentHandler);
+router.get("/:applicationId", getAllCommentsForApplicationHandler);
 
 router.get("/:id", handleGetSingleApplication);
 
