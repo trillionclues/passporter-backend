@@ -45,10 +45,10 @@ const handleGetApplicantAplications = asyncHandler(
 );
 
 const handleGetSingleApplication = asyncHandler(async (req, res) => {
-  const applicationId = req.params;
+  const appId = req.params;
 
   try {
-    const application = await getSingleApplication(applicationId);
+    const application = await getSingleApplication(appId);
     res.status(200).json(application);
   } catch (error) {
     throw new Error(error as string);

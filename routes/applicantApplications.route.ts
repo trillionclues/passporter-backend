@@ -20,9 +20,13 @@ router.get("/", authMiddleware, handleGetApplicantAplications);
 router.post("/cancel-application", authMiddleware, handleCancelApplication);
 
 // comments
-router.post("/add-applicant-comment", authMiddleware, createCommentHandler);
-router.get("/:applicationId", getAllCommentsForApplicationHandler);
+router.post(
+  "/comments/add-applicant-comment",
+  authMiddleware,
+  createCommentHandler
+);
 
-router.get("/:id", handleGetSingleApplication);
+router.get("/:appId", handleGetSingleApplication);
+router.get("/comments/:applicationId", getAllCommentsForApplicationHandler);
 
 export default router;

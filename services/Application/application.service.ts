@@ -78,10 +78,10 @@ const getApplicantApplications = async (applicantId: any) => {
 };
 
 const getSingleApplication = async (data: any) => {
-  const { id } = data;
-  validateMongoDBId(id);
+  const { appId } = data;
+  validateMongoDBId(appId);
 
-  const application = await Application.findById(id);
+  const application = await Application.findById(appId);
 
   if (!application) {
     throw new Error("Application not found");
