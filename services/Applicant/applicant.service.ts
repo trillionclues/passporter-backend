@@ -238,16 +238,6 @@ const cancelApplication = async (applicationId: any) => {
       }
     );
 
-    // Update applicant and remove application id from applicant's applications
-    // await Applicant.findOneAndUpdate(
-    //   { applications: applicationId },
-    //   {
-    //     $pull: {
-    //       applications: applicationId,
-    //     },
-    //   }
-    // );
-
     // update application queueStatus to cancelled and applicatype to none
     await Application.updateOne(
       { _id: applicationId },
@@ -268,6 +258,33 @@ const cancelApplication = async (applicationId: any) => {
   }
 };
 
+const updateProfile = async (data: any, applicantId: any) => {
+  validateMongoDBId(applicantId);
+
+  try {
+    const { firstname, lastname, email } = data;
+
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      throw new Error("Applicant not found");
+    }
+
+    // Update the applicant's profile information
+    applicant.firstname = firstname || applicant.firstname;
+    applicant.lastname = lastname || applicant.lastname;
+    applicant.email = email || applicant.email;
+    // applicant.profilePicture = profilePicture || applicant.profilePicture;
+
+    // Save the updated applicant profile to the database
+    await applicant.save();
+
+    // Return the updated applicant profile
+    return applicant;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 export {
   createNewApplicant,
   getAllApplicants,
@@ -279,4 +296,5 @@ export {
   sendPasswordResetToken,
   passwordResetLinkWithToken,
   cancelApplication,
+  updateProfile,
 };

@@ -123,7 +123,7 @@ const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
     const applicantId = req.applicant?._id?.toString();
 
     const updated = await updateApplicant(data, applicantId);
-    res.json(updated);
+     res.status(200).send(updated);
   } catch (error) {
     throw new Error(error as string);
   }

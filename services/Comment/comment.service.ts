@@ -48,6 +48,7 @@ const createApplicantComment = async (
 };
 
 const getAllCommentsForApplication = async (applicationId: string) => {
+  validateMongoDBId(applicationId);
   try {
     const comments = await Comment.find({ applicationId }).exec();
 
