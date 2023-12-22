@@ -179,28 +179,6 @@ const passwordResetLinkWithToken = async (
   return { message: "Password reset successful!" };
 };
 
-// Update Profile
-const updateApplicant = async (data: any, applicantId: any) => {
-  const { firstname, lastname, email } = data;
-  validateMongoDBId(applicantId);
-
-  // Object with updated defined fields
-  const updateData: any = {
-    firstname: firstname || undefined,
-    lastname: lastname || undefined,
-    email: email || undefined,
-  };
-
-  const updatedApplicant = await Applicant.findByIdAndUpdate(
-    applicantId,
-    updateData,
-    {
-      new: true,
-    }
-  );
-  return updatedApplicant;
-};
-
 const updateProfilePicture = async (
   applicantId: string,
   profilePicture: string
@@ -290,7 +268,6 @@ export {
   getAllApplicants,
   getOneApplicant,
   applicantLogin,
-  updateApplicant,
   tokenRefresh,
   logoutApplicant,
   sendPasswordResetToken,

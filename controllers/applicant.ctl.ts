@@ -4,12 +4,12 @@ import {
   createNewApplicant,
   getOneApplicant,
   getAllApplicants,
-  updateApplicant,
   tokenRefresh,
   logoutApplicant,
   sendPasswordResetToken,
   passwordResetLinkWithToken,
   cancelApplication,
+  updateProfile,
 } from "../services/Applicant/applicant.service";
 import { CustomRequest } from "../types/CustomRequest";
 import Application from "../models/Applications/application.model";
@@ -122,7 +122,7 @@ const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
     const data = req.body;
     const applicantId = req.applicant?._id?.toString();
 
-    const updated = await updateApplicant(data, applicantId);
+    const updated = await updateProfile(data, applicantId);
      res.status(200).send(updated);
   } catch (error) {
     throw new Error(error as string);
