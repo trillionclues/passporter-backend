@@ -5,7 +5,7 @@ export interface AdminDocument extends Document {
   lastname: string;
   password: string;
   email: string;
-  profilePictureUrl?: String;
+  profilePicture?: String;
   isPasswordMatched(enteredPassword: string): Promise<boolean>;
   createPasswordResetToken(): Promise<string>;
   passwordChangedAt?: Date;

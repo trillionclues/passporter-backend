@@ -56,18 +56,27 @@ const getAllCommentsForApplication = async (applicationId: string) => {
     const commenterDetails = await Promise.all(
       comments.map(async (comment) => {
         let commenterName = "Unknown";
+        let profilePicture: any;
+
         if (comment.userType === "applicant") {
           const applicant = await Applicant.findById(comment.userId);
           if (applicant) {
             commenterName = `${applicant.firstname} ${applicant.lastname}`;
+            profilePicture = applicant.profilePicture;
           }
         } else if (comment.userType === "admin") {
           const admin = await Admin.findById(comment.userId);
           if (admin) {
             commenterName = `${admin.firstname} ${admin.lastname}`;
+            profilePicture = admin.profilePicture;
           }
         }
-        return { commenterName, commentText: comment.text };
+        return {
+          commenterName,
+          commentText: comment.text,
+          profilePicture,
+          createdAt: comment.createdAt,
+        };
       })
     );
 

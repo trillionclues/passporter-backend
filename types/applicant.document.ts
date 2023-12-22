@@ -6,7 +6,7 @@ export interface ApplicantDocument extends Document {
   password: string;
   email: string;
   address?: string;
-  profilePictureUrl?: String;
+  profilePicture?: String;
   isPasswordMatched(enteredPassword: string): Promise<boolean>;
   createPasswordResetToken(): Promise<string>;
   passwordChangedAt?: Date;
