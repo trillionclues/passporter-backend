@@ -63,17 +63,17 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     );
 
     // get profile picture
-    let profilePictureUrl: any;
+    let profilePicture: any;
 
-    if (findApplicant.profilePictureUrl) {
-      profilePictureUrl = findApplicant?.profilePictureUrl;
+    if (findApplicant.profilePicture) {
+      profilePicture = findApplicant?.profilePicture;
     } else {
       const randomImageUrl = faker.image.avatarGitHub();
-      profilePictureUrl = randomImageUrl;
+      profilePicture = randomImageUrl;
     }
 
     return {
-      profilePictureUrl,
+      profilePicture,
       token: generateToken(applicantId),
       refreshToken,
     };
@@ -203,11 +203,11 @@ const updateApplicant = async (data: any, applicantId: any) => {
 
 const updateProfilePicture = async (
   applicantId: string,
-  profilePictureUrl: string
+  profilePicture: string
 ) => {
   const applicant = await Applicant.findByIdAndUpdate(
     applicantId,
-    { profilePicture: profilePictureUrl },
+    { profilePicture: profilePicture },
     { new: true }
   );
   return applicant;
