@@ -61,13 +61,13 @@ const getAllCommentsForApplication = async (applicationId: string) => {
         if (comment.userType === "applicant") {
           const applicant = await Applicant.findById(comment.userId);
           if (applicant) {
-            commenterName = `${applicant.firstname} ${applicant.lastname}`;
+            commenterName = `${applicant.firstname}`;
             profilePicture = applicant.profilePicture;
           }
         } else if (comment.userType === "admin") {
           const admin = await Admin.findById(comment.userId);
           if (admin) {
-            commenterName = `${admin.firstname} ${admin.lastname}`;
+            commenterName = `${admin.firstname}`;
             profilePicture = admin.profilePicture;
           }
         }
