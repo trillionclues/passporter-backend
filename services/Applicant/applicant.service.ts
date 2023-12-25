@@ -75,6 +75,8 @@ const applicantLogin = async (data: { email: string; password: string }) => {
     return {
       profilePicture,
       token: generateToken(applicantId),
+      firstname: findApplicant?.firstname,
+      lastname: findApplicant?.lastname,
       refreshToken,
     };
   } else {
