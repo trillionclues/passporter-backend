@@ -10,6 +10,8 @@ import {
   passwordResetLinkWithToken,
   cancelApplication,
   updateProfile,
+  requestRoleUpgrade,
+  deleteAccount,
 } from "../services/Applicant/applicant.service";
 import { CustomRequest } from "../types/CustomRequest";
 import Application from "../models/Applications/application.model";
@@ -93,6 +95,16 @@ const handleApplicantLogout = asyncHandler(async (req, res) => {
   }
 });
 
+const handleDeleteAccount = asyncHandler(async (req: CustomRequest, res) => {
+  const applicantId = req.applicant?._id?.toString();
+  try {
+    const result = await deleteAccount(applicantId);
+    res.json(result);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
 const handleSendPasswordResetToken = asyncHandler(async (req, res) => {
   const { email } = req.body;
   try {
@@ -152,11 +164,21 @@ const handleCancelApplication = asyncHandler(
   }
 );
 
+const handleRequestRoleUpgrade = asyncHandler(
+  async (req: CustomRequest, res) => {
+    const applicantId = req.applicant?._id?.toString();
+    try {
+      const result = requestRoleUpgrade(applicantId);
+      res.json(result);
+    } catch (error) {
+      throw new Error(error as string);
+    }
+  }
+);
+
 // const hnupdateProfilePicture = asyncHandler(async (req: CustomRequest, res) => {
 
 // })
-
-// const applicantWithApplications = await Applicant.findById(applicantId).populate('applications');
 
 export {
   createApplicant,
@@ -169,4 +191,6 @@ export {
   handleSendPasswordResetToken,
   handleResetLinkWithToken,
   handleCancelApplication,
+  handleRequestRoleUpgrade,
+  handleDeleteAccount,
 };

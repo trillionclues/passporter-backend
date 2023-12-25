@@ -118,6 +118,16 @@ const logoutApplicant = async (refreshToken: any) => {
   }
 };
 
+const deleteAccount = async (applicantId: any) => {
+  validateMongoDBId(applicantId);
+  try {
+    const deletedApplicant = await Applicant.findByIdAndDelete(applicantId);
+    return deletedApplicant;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 const sendPasswordResetToken = async (email: string) => {
   const applicant: ApplicantDocument | null = await Applicant.findOne({
     email,
@@ -263,6 +273,30 @@ const updateProfile = async (data: any, applicantId: any) => {
   }
 };
 
+// Role upgrade request
+const requestRoleUpgrade = async (applicantId: any) => {
+  validateMongoDBId(applicantId);
+  try {
+    const applicant = await Applicant.findById(applicantId);
+    if (!applicant) {
+      throw new Error("Applicant not found");
+    }
+
+    // check if applicant already made a request
+    if (applicant.roleUpgradeRequest !== "none") {
+      throw new Error("Role upgrade request already exists!");
+    }
+
+    // Update role upgrade reqq to pending
+    applicant.roleUpgradeRequest = "pending";
+    await applicant.save();
+
+    return { success: true, message: "Role upgrade request submitted!" };
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
 export {
   createNewApplicant,
   getAllApplicants,
@@ -274,4 +308,6 @@ export {
   passwordResetLinkWithToken,
   cancelApplication,
   updateProfile,
+  requestRoleUpgrade,
+  deleteAccount,
 };

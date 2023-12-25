@@ -16,6 +16,7 @@ export interface ApplicantDocument extends Document {
   queueStatus: "InQueue" | "Reviewed";
   refreshToken?: string;
   role: string;
+  roleUpgradeRequest: "pending" | "approved" | "rejected" | "none";
   _id?: string;
   createdAt?: Date;
   updatedAt?: Date;

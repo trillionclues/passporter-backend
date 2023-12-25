@@ -48,6 +48,11 @@ const applicantSchema = new Schema(
       type: String,
       default: "applicant",
     },
+    roleUpgradeRequest: {
+      type: String,
+      enum: ["pending", "approved", "rejected", "none"],
+      default: "none",
+    },
     applications: [
       {
         type: mongoose.Schema.Types.ObjectId,
