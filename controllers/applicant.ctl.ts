@@ -47,7 +47,6 @@ const handleGetOneApplicant = asyncHandler(async (req, res) => {
 const handleApplicantLogin = asyncHandler(async (req, res) => {
   try {
     const applicant = await applicantLogin(req.body);
-    // const applicantId = await getOneApplicant(applicant.);
 
     res.cookie("refreshToken", applicant.refreshToken, {
       httpOnly: true,
@@ -123,7 +122,7 @@ const handleUpdateApplicant = asyncHandler(async (req: CustomRequest, res) => {
     const applicantId = req.applicant?._id?.toString();
 
     const updated = await updateProfile(data, applicantId);
-     res.status(200).send(updated);
+    res.status(200).send(updated);
   } catch (error) {
     throw new Error(error as string);
   }

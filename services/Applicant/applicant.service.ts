@@ -9,8 +9,8 @@ import crypto from "crypto";
 import { ApplicantDocument } from "../../types/applicant.document";
 import generateEmailBody from "../../views/emailBody";
 import { sendCustomEmail } from "../Email/email.service";
-import { faker } from "@faker-js/faker";
 import ApplicationQueue from "../../models/Application Queue/applicationqueue.model";
+import { generateDummyProfilePicture } from "../../utils/generateDummyProfilePicture";
 
 const createNewApplicant = async (body: ApplicantDocument) => {
   const { email, password, firstname, lastname } = body;
@@ -23,6 +23,7 @@ const createNewApplicant = async (body: ApplicantDocument) => {
       password,
       firstname,
       lastname,
+      profilePicture: generateDummyProfilePicture(),
     });
     return newApplicant;
   } else {
@@ -62,15 +63,9 @@ const applicantLogin = async (data: { email: string; password: string }) => {
       }
     );
 
-    // get profile picture
-    let profilePicture: any;
-
-    if (findApplicant.profilePicture) {
-      profilePicture = findApplicant?.profilePicture;
-    } else {
-      const randomImageUrl = faker.image.avatarGitHub();
-      profilePicture = randomImageUrl;
-    }
+    // check if profile picture exist for applicant
+    const profilePicture =
+      findApplicant?.profilePicture || generateDummyProfilePicture();
 
     return {
       profilePicture,
