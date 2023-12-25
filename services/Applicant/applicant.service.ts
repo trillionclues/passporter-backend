@@ -237,7 +237,7 @@ const updateProfile = async (data: any, applicantId: any) => {
   validateMongoDBId(applicantId);
 
   try {
-    const { firstname, lastname, email } = data;
+    const { firstname, lastname, email, profilePicture } = data;
 
     const applicant = await Applicant.findById(applicantId);
     if (!applicant) {
@@ -248,12 +248,15 @@ const updateProfile = async (data: any, applicantId: any) => {
     applicant.firstname = firstname || applicant.firstname;
     applicant.lastname = lastname || applicant.lastname;
     applicant.email = email || applicant.email;
-    // applicant.profilePicture = profilePicture || applicant.profilePicture;
+
+    // Update profilePicture only if provided
+    if (profilePicture) {
+      applicant.profilePicture = profilePicture;
+    }
 
     // Save the updated applicant profile to the database
     await applicant.save();
 
-    // Return the updated applicant profile
     return applicant;
   } catch (error) {
     throw new Error(error as string);
