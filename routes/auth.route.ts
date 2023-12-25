@@ -32,6 +32,6 @@ router.get("/auth/logout", handleApplicantLogout);
 // dynamic routes
 router.delete("/delete-account", authMiddleware, handleDeleteAccount);
 router.put("/update-user", authMiddleware, handleUpdateApplicant);
-router.get("/:id", authMiddleware, handleGetOneApplicant);
+router.get("/user-details", authMiddleware, handleGetOneApplicant);
 
 export default router;
