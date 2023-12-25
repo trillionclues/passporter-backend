@@ -36,12 +36,12 @@ const getAllApplicants = async () => {
   return applicant;
 };
 
-const getOneApplicant = async (data: ParamsDictionary) => {
-  const { id } = data;
-  validateMongoDBId(id);
+const getOneApplicant = async (data: any) => {
+  const applicantId = data;
+  validateMongoDBId(applicantId);
 
-  const getApp = await Applicant.findById(id);
-  return getApp;
+  const applicantData = await Applicant.findById(applicantId);
+  return applicantData;
 };
 
 // Applicant Service Auth

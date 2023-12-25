@@ -36,7 +36,7 @@ const handleGetAllApplicants = asyncHandler(async (req, res) => {
 });
 
 const handleGetOneApplicant = asyncHandler(async (req, res) => {
-  const applicantId = req.params;
+  const applicantId = req.applicant?._id?.toString();
   try {
     const getApplicant = await getOneApplicant(applicantId);
     res.json({ getApplicant });
