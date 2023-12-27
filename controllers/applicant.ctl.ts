@@ -35,7 +35,7 @@ const handleGetAllApplicants = asyncHandler(async (req, res) => {
   }
 });
 
-const handleGetOneApplicant = asyncHandler(async (req, res) => {
+const handleGetOneApplicant = asyncHandler(async (req: CustomRequest, res) => {
   const applicantId = req.applicant?._id?.toString();
   try {
     const getApplicant = await getOneApplicant(applicantId);
@@ -99,7 +99,8 @@ const handleDeleteAccount = asyncHandler(async (req: CustomRequest, res) => {
   const applicantId = req.applicant?._id?.toString();
   try {
     const result = await deleteAccount(applicantId);
-    res.json(result);
+
+    res.status(200).send(result);
   } catch (error) {
     throw new Error(error as string);
   }

@@ -1,4 +1,3 @@
-import { ParamsDictionary } from "express-serve-static-core";
 import Applicant from "../../models/ApplicantModel/applicant.model";
 import Application from "../../models/Applications/application.model";
 import { validateMongoDBId } from "../../utils/validateMongoDBId";
@@ -122,6 +121,17 @@ const deleteAccount = async (applicantId: any) => {
   validateMongoDBId(applicantId);
   try {
     const deletedApplicant = await Applicant.findByIdAndDelete(applicantId);
+
+    if (!deletedApplicant) {
+      throw new Error("Applicant not found");
+    }
+
+    // Delete applications associated with the applicant
+    await Application.deleteMany({ applicantId: applicantId });
+
+    // Delete entries in the application queue associated with the applicant
+    await ApplicationQueue.deleteMany({ applicationIds: applicantId });
+
     return deletedApplicant;
   } catch (error) {
     throw new Error(error as string);
