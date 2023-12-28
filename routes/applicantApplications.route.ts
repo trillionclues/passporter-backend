@@ -5,6 +5,7 @@ import {
   createApplicationHandler,
   handleGetApplicantAplications,
   handleGetSingleApplication,
+  handleTrackApplication,
 } from "../controllers/application.ctl";
 import { handleCancelApplication } from "../controllers/applicant.ctl";
 import {
@@ -27,6 +28,7 @@ router.post(
 );
 
 router.get("/:appId", handleGetSingleApplication);
+router.get("/track-application/:applicationId", handleTrackApplication);
 router.get("/comments/:applicationId", getAllCommentsForApplicationHandler);
 
 export default router;

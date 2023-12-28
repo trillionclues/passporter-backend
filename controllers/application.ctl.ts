@@ -4,6 +4,7 @@ import {
   createNewApplication,
   getApplicantApplications,
   getSingleApplication,
+  trackApplication,
 } from "../services/Application/application.service";
 
 const createApplicationHandler = asyncHandler(
@@ -55,10 +56,21 @@ const handleGetSingleApplication = asyncHandler(async (req, res) => {
   }
 });
 
+const handleTrackApplication = asyncHandler(async (req, res) => {
+  const { applicationId } = req.params;
+  try {
+    const result = await trackApplication(applicationId);
+    res.status(200).json(result);
+  } catch (error) {
+    throw new Error(error as string);
+  }
+});
+
 export {
   createApplicationHandler,
   handleGetApplicantAplications,
   handleGetSingleApplication,
+  handleTrackApplication,
 };
 
 //  **** STILL TESTING ****//

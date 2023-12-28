@@ -90,4 +90,21 @@ const getSingleApplication = async (data: any) => {
   return application;
 };
 
-export { createNewApplication, getApplicantApplications, getSingleApplication };
+const trackApplication = async (applicationId: any) => {
+  validateMongoDBId(applicationId);
+
+  const application = await Application.findById(applicationId);
+
+  if (!application) {
+    throw new Error("Application not found");
+  }
+
+  return application;
+};
+
+export {
+  createNewApplication,
+  getApplicantApplications,
+  getSingleApplication,
+  trackApplication,
+};
