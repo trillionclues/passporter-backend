@@ -8,6 +8,7 @@ import dbConnect from "../config/dbConnect";
 import { errorHandler, notFound } from "../middlewares/errorHandler";
 import applicantApplicationRoute from "../routes/applicantApplications.route";
 import applicationQueueRoute from "../routes/queue.route";
+import adminRoute from "../routes/admin.route";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 // routes
 app.use("/api/applicant", authRoute);
 app.use("/api/application", applicantApplicationRoute);
+app.use("/api/admin", adminRoute);
 app.use("/api/queue", applicationQueueRoute);
 
 // error middlwares
