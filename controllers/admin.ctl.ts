@@ -25,9 +25,18 @@ const handleGetRoleUpgradeRequests = asyncHandler(async (req, res) => {
 });
 
 const handleProcessRoleUpgrade = asyncHandler(async (req, res) => {
-  const applicantId = req.params.applicantId;
+  const { applicantId, action } = req.params;
+
   try {
-    const result = await processApplicantRoleUpgradeRequests(applicantId);
+    // validate action
+    if (action !== "reject" && action !== "approve") {
+      res.status(400).json({ error: "Invalid action" });
+    }
+
+    const result = await processApplicantRoleUpgradeRequests(
+      applicantId,
+      action
+    );
     res.json(result);
   } catch (error) {
     throw new Error(error as string);

@@ -29,13 +29,28 @@ const getApplicantsWithRoleUpgradeRequests = async () => {
   return applicantsWithRoleUpgradeRequest;
 };
 
-const processApplicantRoleUpgradeRequests = async (applicantId: any) => {
+const processApplicantRoleUpgradeRequests = async (
+  applicantId: any,
+  action: any
+) => {
   try {
     const applicant = await Applicant.findById(applicantId);
 
     if (!applicant) {
       console.error(`Applicant not found with ID: ${applicantId}`);
       return;
+    }
+
+    // handling rejection
+    if (action === "reject") {
+      await Applicant.updateOne(
+        { _id: applicant._id },
+        { $set: { roleUpgradeRequest: "rejected" } }
+      );
+      return {
+        success: true,
+        message: "Applicant request rejected successfully",
+      };
     }
 
     const currentDate = new Date();

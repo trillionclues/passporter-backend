@@ -11,7 +11,7 @@ router.get("/", adminMiddleware, handleGetAllQueueApplications);
 router.get("/role-requests", adminMiddleware, handleGetRoleUpgradeRequests);
 
 router.put(
-  "/upgrade-applicant-role/:applicantId",
+  "/upgrade-applicant-role/:applicantId/:action",
   adminMiddleware,
   handleProcessRoleUpgrade
 );
